@@ -1,0 +1,329 @@
+/* === Contenedor principal === */
+.conteiner_loginPage {
+    height: 100vh;
+    width: 100%;
+    font-family: "Alan Sans", Arial, sans-serif;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #0e0e14;
+    color: #fff;
+}
+
+/* === Caja principal dividida en 2 columnas === */
+.conteiner_box {
+    display: flex;
+    width: 800px;
+    height: 500px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 3px solid #3498db;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* === Panel izquierdo === */
+.left_panel {
+    flex: 1;
+    background: #3498db; /* Azul llamativo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.left_panel h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* === Panel derecho === */
+.right_panel {
+    flex: 1;
+    background: #0e0e14;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+/* Título Sign Up */
+.right_panel h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+/* Formulario */
+.login_form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 80%;
+}
+
+/* Inputs */
+.login_form input,
+.date_input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border 0.3s, box-shadow 0.3s, width 0.3s;
+    width: 250px;
+    height: 20px;
+    background: #0e0e14;
+    color: #fff;
+    font-family: "Alan Sans", Arial, sans-serif;
+    font-size: 1rem;
+}
+
+.login_form input:focus,
+.date_input:focus {
+    border: 1px solid #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+    width: 280px;
+}
+
+/* === Contenedor principal === */
+.conteiner_loginPage {
+    height: 100vh;
+    width: 100%;
+    font-family: "Alan Sans", Arial, sans-serif;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #0e0e14;
+    color: #fff;
+}
+
+/* === Caja principal dividida en 2 columnas === */
+.conteiner_box {
+    display: flex;
+    width: 800px;
+    height: 500px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 3px solid #3498db;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* === Panel izquierdo === */
+.left_panel {
+    flex: 1;
+    background: #3498db; /* Azul llamativo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.left_panel h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* === Panel derecho === */
+.right_panel {
+    flex: 1;
+    background: #0e0e14;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+/* Título Sign Up */
+.right_panel h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+/* Formulario */
+.login_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 80%;
+}
+
+/* Inputs */
+.login_form input,
+.date_input {
+    box-sizing: border-box; /* evita saltos por el borde */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    width: 250px; /* ancho base */
+    height: 40px;
+    background: #0e0e14;
+    color: #fff;
+    font-family: "Alan Sans", Arial, sans-serif;
+    font-size: 1rem;
+
+    /* Transiciones suaves */
+    transition: width 0.3s ease, border-color 0.3s, box-shadow 0.3s;
+}
+
+.login_form input:focus,
+.date_input:focus {
+    border: 2px solid #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+    width: 280px; /* se expande suavemente */
+}
+
+/* === React Datepicker (tema oscuro estilo póker) === */
+.react-datepicker {
+    background-color: #0e0e14 !important;
+    border: 3px solid #3498db !important;
+    color: #fff !important;
+    border-radius: 10px;
+    font-family: "Alan Sans", Arial, sans-serif;
+}
+
+.react-datepicker__header {
+    background-color: #111 !important;
+    border-bottom: 1px solid #3498db;
+    color: #f1c40f !important;
+    padding: 6px 8px !important; /* menos espacio */
+    min-height: unset !important;
+}
+
+/* Mes/Año arriba */
+.react-datepicker__current-month {
+    font-size: 0.95rem !important;
+    margin: 0 28px !important;
+    text-align: center !important;
+    color: #f1c40f !important;
+}
+
+.react-datepicker__day {
+    color: #fff !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+    background-color: #e74c3c !important; /* Rojo casino */
+    color: #fff !important;
+    border-radius: 50%;
+}
+
+.react-datepicker__day:hover {
+    background-color: #333 !important;
+    border-radius: 50%;
+}
+
+.react-datepicker__day-name {
+    color: #ffffff !important; /* dorado */
+    font-weight: bold !important;
+}
+
+.react-datepicker__day--outside-month {
+    color: #555 !important;
+}
+
+/* === Navegación más pequeña === */
+.react-datepicker__navigation {
+    top: 8px !important;
+    width: 18px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+    border: none !important;
+    outline: none !important;
+}
+
+.react-datepicker__navigation--previous {
+    left: 6px !important;
+}
+.react-datepicker__navigation--next {
+    right: 6px !important;
+}
+
+.react-datepicker__navigation-icon::before {
+    width: 7px !important;
+    height: 7px !important;
+    border-width: 2px 2px 0 0 !important;
+    border-color: #f1c40f !important; /* dorado */
+}
+
+/* Flecha dropdown de año/mes */
+.react-datepicker__year-read-view--down-arrow,
+.react-datepicker__month-read-view--down-arrow {
+    width: 7px !important;
+    height: 7px !important;
+    border-width: 2px 2px 0 0 !important;
+    border-color: #f1c40f !important;
+    margin-top: 0 !important;
+}
+
+/* === Botón del login === */
+.login_form .sendBtn {
+    background-color: #0e0e14;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1.2rem;
+    font-family: "Alan Sans", Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    height: 45px;
+    width: 150px;
+    transition: background 0.3s, color 0.3s, border-radius 0.3s;
+}
+
+.login_form .sendBtn:hover {
+    background-color: #2980b9;
+    color: #0e0e14;
+    border-radius: 12px;
+}
+
+.password_row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    width: 250px;
+    transition: width 0.3s;
+}
+
+.password_row input {
+    flex: 2;
+}
+
+.password_row:focus-within {
+    width: 280px;
+}
+
+.password_row .icon_button_outside {
+    background: #0e0e14;
+    border: 2px solid #3498db;
+    border-radius: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    width: 40px;
+    height: 40px;
+    transition: all 0.2s;
+}
+
+.password_row .icon_button_outside:hover {
+    background: #2980b9;
+}
+
+.icon_img {
+    width: 20px;
+    height: 20px;
+}
+
