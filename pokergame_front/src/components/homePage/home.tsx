@@ -1,24 +1,37 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createSocket } from "../socket";
+import { createSocket } from "../../socket";
+import axios from "axios";
 
 export default function HomePage() {
     const navigate = useNavigate();
+    const userId= localStorage.getItem("userId");
 
     useEffect(() => {
+        console.log("UserID en HomePage:", userId);
         const token = localStorage.getItem("token");
         if (!token) {
             navigate("/login");
             return;
         }
 
-        // Conectamos solo aquí
+        axios.post("http://localhost:3001/auth/verify", {
+            token
+        }).then((response) => {
+            if (!response.data.valid) {
+                navigate("/login");
+            }
+        }).catch((error) => {
+            console.error("Error al verificar el token:", error);
+            navigate("/login");
+        })
+
         const socket = createSocket();
 
         socket.on("connect", () => {
             console.log("✅ Conectado al servidor:", socket.id);
-            const userId = localStorage.getItem("userId");
-            if (userId) socket.emit("register", userId);
+            console.log("Enviando userId al servidor:", userId);
+            socket.emit("register", userId);
         });
 
         socket.on("welcome", (msg) => console.log("👋 Mensaje del servidor:", msg));
