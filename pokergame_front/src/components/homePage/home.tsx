@@ -2,10 +2,12 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createSocket } from "../../socket";
 import axios from "axios";
+import OptionBar from "../optionBar/optionBar";
+import "./home.css";
 
 export default function HomePage() {
     const navigate = useNavigate();
-    const userId= localStorage.getItem("userId");
+    const userId = localStorage.getItem("userId");
 
     useEffect(() => {
         console.log("UserID en HomePage:", userId);
@@ -42,5 +44,14 @@ export default function HomePage() {
         };
     }, []);
 
-    return <h1>Bienvenido al Juego Poker 🎲</h1>;
+    return (
+        <div className="home-page">
+            <OptionBar />
+            <div className="body_home">
+                <div className="lobbys"></div>
+                <div className="info_lobby"></div>
+            </div>
+        </div>
+
+    );
 }
