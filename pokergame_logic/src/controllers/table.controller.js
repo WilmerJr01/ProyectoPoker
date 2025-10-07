@@ -24,7 +24,7 @@ export const createTable = async (req, res) => {
 // Obtener todas las mesas
 export const getTables = async (req, res) => {
   try {
-    const tables = await Table.find().populate("players").populate("gamesPlayed");
+    const tables = await Table.find();
     res.json(tables);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -34,7 +34,7 @@ export const getTables = async (req, res) => {
 // Obtener mesa por ID
 export const getTableById = async (req, res) => {
   try {
-    const table = await Table.findById(req.params.id).populate("players").populate("gamesPlayed");
+    const table = await Table.findById(req.params.id);
     if (!table) return res.status(404).json({ message: "Mesa no encontrada" });
     res.json(table);
   } catch (error) {

@@ -18,11 +18,17 @@ export default function SignUp() {
     const handleLogin = async () => {
         try {
             const port = import.meta.env.VITE_PORT_AUTH;
-            await axios.post(`http://localhost:${port}/login`, {
+            const date = birthdate ? `${birthdate.getDate()}-${birthdate.getMonth() + 1}-${birthdate.getFullYear()}` : " "
+            console.log(date)
+            const memory = await axios.post(`http://localhost:${port}/auth/register`, {
+                name,
+                lastName,
+                birthDate: date,
                 nickname,
-                password,
-                birthdate: birthdate ? birthdate.toISOString() : null,
+                password
             });
+            localStorage.setItem("token", memory.data.token);
+            localStorage.setItem("userId", memory.data.userId);
             navigate("/home");
         } catch (err) {
             console.error(err);

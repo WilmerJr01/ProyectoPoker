@@ -11,9 +11,29 @@
     width: 100%;
     overflow: hidden;
     font-family: "Alan Sans", Arial, sans-serif;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
     justify-content: center;
     align-items: center;
-    background: #0e0e14;
+    background: transparent;
+}
+
+.lobbys{
+    grid-column: 2;
+    margin: 5px;
+    margin-bottom: auto;
+    align-self: flex-start;
+}
+
+.count_lobbys {
+    display: flex;
+    background-color: rgb(60, 48, 48);
+    justify-content: center;
+}
+
+.count_lobbys h1{
+    font-size: 0.8rem;
+    font-family: 'Alan Sans';
+    margin: 1px;
 }
 
