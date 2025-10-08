@@ -20,8 +20,8 @@ export default function HomePage() {
             return;
         }
 
-        // Verificar token
-        axios.post("http://localhost:3001/auth/verify", { token })
+        const port = import.meta.env.VITE_PORT_AUTH;
+        axios.post(`${port}/auth/verify`, { token })
             .then((response) => {
                 if (!response.data.valid) {
                     navigate("/login");

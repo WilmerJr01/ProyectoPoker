@@ -23,7 +23,8 @@ export default function TablePage() {
         if (!tableId) return;
 
         // Verificar token antes de continuar
-        axios.post("http://localhost:3001/auth/verify", { token })
+        const port = import.meta.env.VITE_PORT_AUTH;
+        axios.post(`${port}/auth/verify`, { token })
             .then((response) => {
                 if (!response.data.valid) navigate("/login");
             })

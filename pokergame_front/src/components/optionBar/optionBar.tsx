@@ -15,7 +15,7 @@ export default function OptionBar() {
         const userId = localStorage.getItem("userId");
         if (!userId || !port) return;
 
-        axios.get(`http://localhost:${port}/auth/user/${userId}`)
+        axios.get(`${port}/auth/user/${userId}`)
             .then((res) => {
                 setUserData(res.data);
                 localStorage.setItem("userData", JSON.stringify(res.data))

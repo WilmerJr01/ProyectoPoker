@@ -20,7 +20,7 @@ export default function SignUp() {
             const port = import.meta.env.VITE_PORT_AUTH;
             const date = birthdate ? `${birthdate.getDate()}-${birthdate.getMonth() + 1}-${birthdate.getFullYear()}` : " "
             console.log(date)
-            const memory = await axios.post(`http://localhost:${port}/auth/register`, {
+            const memory = await axios.post(`${port}/auth/register`, {
                 name,
                 lastName,
                 birthDate: date,

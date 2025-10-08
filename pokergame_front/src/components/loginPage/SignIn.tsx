@@ -15,7 +15,7 @@ export default function SignUp() {
         try {
             const port = import.meta.env.VITE_PORT_AUTH;
             console.log(port);
-            const memory= await axios.post(`http://localhost:${port}/auth/login`, {
+            const memory= await axios.post(`${port}/auth/login`, {
                 nickname,
                 password
             });
