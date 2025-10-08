@@ -16,8 +16,7 @@ const allowed = (process.env.CORS_ORIGIN || "")
     .filter(Boolean);
 
 app.use(cors({
-    origin: allowed.length ? allowed : "*",
-    credentials: true,
+    origin: allowed.length ? allowed : "*"
 }));
 
 app.use(express.json());
@@ -32,3 +31,4 @@ app.use("/auth", router);
 app.get("/auth/health", (_req, res) => res.json({ ok: true }));
 
 export default app;
+z
