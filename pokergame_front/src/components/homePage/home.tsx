@@ -20,17 +20,19 @@ export default function HomePage() {
             return;
         }
 
-        axios.post("http://localhost:3001/auth/verify", {
-            token
-        }).then((response) => {
-            if (!response.data.valid) {
+        // Verificar token
+        axios.post("http://localhost:3001/auth/verify", { token })
+            .then((response) => {
+                if (!response.data.valid) {
+                    navigate("/login");
+                }
+            })
+            .catch((error) => {
+                console.error("Error al verificar el token:", error);
                 navigate("/login");
-            }
-        }).catch((error) => {
-            console.error("Error al verificar el token:", error);
-            navigate("/login");
-        })
+            });
 
+        // --- Fetch automático ---
         const fetchLobbys = async () => {
             try {
                 const res = await axios.get("http://localhost:4000/api/tables/", {
@@ -42,23 +44,25 @@ export default function HomePage() {
             }
         };
 
+        // Llamada inicial
         fetchLobbys();
+
+        // Repetir cada 10 segundos (puedes cambiar el tiempo)
+        const interval = setInterval(fetchLobbys, 10000);
 
         const socket = createSocket();
 
-        socket.on("connect", () => {
-            console.log("✅ Conectado al servidor:", socket.id);
-            console.log("Enviando userId al servidor:", userId);
-            socket.emit("register", userId);
-        });
+        const handleWelcome = (msg: string) => console.log("👋", msg);
 
-        socket.on("welcome", (msg) => console.log("👋 Mensaje del servidor:", msg));
-        socket.on("disconnect", () => console.log("❌ Desconectado del servidor"));
+        socket.on("welcome", handleWelcome);
 
+        // Limpieza al desmontar
         return () => {
-            socket.disconnect();
+            clearInterval(interval);
+            socket.off("welcome", handleWelcome);
         };
     }, []);
+
 
     return (
         <div className="home-page">
@@ -71,7 +75,7 @@ export default function HomePage() {
                     {lobbys.length > 0 ? (
                         <ul>
                             {lobbys.map((thislobby) => (
-                                <LobbyCard key={thislobby._id} lobby={thislobby}/>
+                                <LobbyCard key={thislobby._id} lobby={thislobby} />
                             ))}
                         </ul>
                     ) : (

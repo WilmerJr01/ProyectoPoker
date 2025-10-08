@@ -3,6 +3,10 @@ import cancelBtn from "../../assets/cancelBtn.svg";
 import userIcon from "../../assets/userIcon.svg";
 import exitIcon from "../../assets/exitIcon.svg";
 import { useNavigate } from "react-router-dom";
+import winIcon from "../../assets/winIcon.svg";
+import fichaIcon from "../../assets/ficha.svg"
+import matchIcon from "../../assets/matchIcon.svg"
+
 
 
 type UserData = {
@@ -32,11 +36,10 @@ export default function MenuInfo({ user, onClose }: { user: UserData; onClose: (
                 <img src={userIcon} alt="User" />
                 <h3>{user.nickname}</h3>
             </div>
-            <p><strong>Nombre:</strong> {user.name} {user.lastName}</p>
-            <p><strong>Nacimiento:</strong> {new Date(user.birthDate).toLocaleDateString()}</p>
-            <p><strong>Stack:</strong> {user.stack}</p>
-            <p><strong>Victorias:</strong> {user.wins}</p>
-            <p><strong>Partidas:</strong> {user.totalGames}</p>
+            <p><strong>Name:</strong> {user.name} {user.lastName}</p>
+            <p><strong>Stack:</strong> <img src={fichaIcon} />{user.stack}</p>
+            <p><strong>Wins:</strong> <img src={winIcon} />{user.wins}</p>
+            <p><strong>Games:</strong> <img src={matchIcon} /> {user.totalGames}</p>
 
             <hr />
             <button onClick={logOut} className='exitBtn'><img src={exitIcon} alt="Exit" /></button>

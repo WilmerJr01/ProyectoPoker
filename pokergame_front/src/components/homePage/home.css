@@ -16,13 +16,39 @@
     justify-content: center;
     align-items: center;
     background: transparent;
+    overflow-x: visible;
+    /* permite que la card “salga” al hacer scale */
 }
 
-.lobbys{
+.lobbys {
     grid-column: 2;
-    margin: 5px;
+    margin: 0;
     margin-bottom: auto;
     align-self: flex-start;
+
+    /* 🔽 Hace scroll sólo dentro de este contenedor */
+    max-height: 90vh;
+    width: auto;
+    overflow-x: visible;
+    overflow-y: auto;
+
+    /* Scrollbar elegante */
+    scrollbar-width: thin;
+    scrollbar-color: #3498db transparent;
+}
+
+/* Scrollbar (para Chrome, Edge, Safari) */
+.lobbys::-webkit-scrollbar {
+    width: 8px;
+}
+
+.lobbys::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 10px;
+}
+
+.lobbys::-webkit-scrollbar-thumb:hover {
+    background: #217dbb;
 }
 
 .count_lobbys {
@@ -31,9 +57,8 @@
     justify-content: center;
 }
 
-.count_lobbys h1{
+.count_lobbys h1 {
     font-size: 0.8rem;
     font-family: 'Alan Sans';
-    margin: 1px;
+    margin: 2px;
 }
-

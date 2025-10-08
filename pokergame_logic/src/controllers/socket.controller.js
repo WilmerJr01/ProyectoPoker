@@ -1,15 +1,25 @@
-// configureSocket.js
 import Table from "../models/Table.js";
 
 export const configureSocket = (io) => {
-    // Mapas útiles para direccionar mensajes si lo necesitas
+    // Mapas útiles
     const userIdToSocket = new Map();
     const socketToUserId = new Map();
 
+    // 🟢 1) Añade ESTE BLOQUE antes del io.on("connect")
+    io.use((socket, next) => {
+        const userId = socket.handshake.auth?.userId; // viene desde el cliente (socket.auth)
+        if (userId) {
+            socket.data.userId = userId;
+            console.log(`🤝 Autenticado por handshake userId=${userId}`);
+        }
+        next(); // continuar siempre
+    });
+
+    // 🟢 2) Ahora sí, manejamos las conexiones
     io.on("connect", (socket) => {
         console.log("✅ Socket conectado:", socket.id);
 
-        // 1) Registrar usuario (el cliente debe emitir 'register' con su userId)
+        // Registrar usuario manualmente (compatibilidad con clientes antiguos)
         socket.on("register", (rawUserId) => {
             const userId = String(rawUserId || "").trim();
             if (!userId) {
@@ -17,7 +27,6 @@ export const configureSocket = (io) => {
                 return;
             }
 
-            // Si ese user ya estaba conectado, opcionalmente reemplaza la sesión previa
             const prevSocketId = userIdToSocket.get(userId);
             if (prevSocketId && prevSocketId !== socket.id) {
                 const prevSocket = io.sockets.sockets.get(prevSocketId);
@@ -33,7 +42,7 @@ export const configureSocket = (io) => {
             console.log(`🪪 Registrado userId=${userId} en socket=${socket.id}`);
         });
 
-        // 2) Unirse a una mesa
+        // Unirse a una mesa
         socket.on("joinTable", async (tableId, ack) => {
             try {
                 const userId = socket.data.userId || socketToUserId.get(socket.id);
@@ -43,6 +52,7 @@ export const configureSocket = (io) => {
                     if (typeof ack === "function") ack({ ok: false, error: msg });
                     return;
                 }
+
                 if (!tableId) {
                     const msg = "Falta tableId.";
                     socket.emit("joinTable:error", msg);
@@ -60,16 +70,18 @@ export const configureSocket = (io) => {
 
                 await socket.join(tableId);
 
-                // Evita duplicados del mismo user en la mesa
-                await Table.findByIdAndUpdate(
+                const updatedTable = await Table.findByIdAndUpdate(
                     tableId,
                     { $addToSet: { players: userId } },
                     { new: true }
                 );
 
-                io.to(tableId).emit("playerJoined", { userId, tableId });
-                if (typeof ack === "function") ack({ ok: true });
+                io.to(tableId).emit("players:update", {
+                    tableId,
+                    players: updatedTable.players,
+                });
 
+                if (typeof ack === "function") ack({ ok: true, players: updatedTable.players });
                 console.log(`👤 ${userId} se unió a la mesa ${tableId}`);
             } catch (err) {
                 console.error(err);
@@ -79,7 +91,7 @@ export const configureSocket = (io) => {
             }
         });
 
-        // 3) (Opcional) Salir de una mesa
+        // Salir de la mesa
         socket.on("leaveTable", async (tableId, ack) => {
             try {
                 const userId = socket.data.userId || socketToUserId.get(socket.id);
@@ -91,10 +103,8 @@ export const configureSocket = (io) => {
             }
         });
 
-        // Mensaje de bienvenida (no bloqueante)
         socket.emit("welcome", "Bienvenido al servidor de Poker 🎲");
 
-        // Limpieza al desconectar
         socket.on("disconnect", () => {
             const userId = socketToUserId.get(socket.id);
             if (userId && userIdToSocket.get(userId) === socket.id) {
@@ -105,6 +115,5 @@ export const configureSocket = (io) => {
         });
     });
 
-    // Por si te sirve externamente
     return { userIdToSocket };
 };

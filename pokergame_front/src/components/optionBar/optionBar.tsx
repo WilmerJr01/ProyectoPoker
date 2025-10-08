@@ -4,16 +4,7 @@ import axios from 'axios';
 import menu_icon from "../../assets/menu_icon.svg";
 import MenuInfo from '../menuInfo/menuInfo';
 import ficha_icon from "../../assets/ficha.svg"
-
-type UserData = {
-    name: string;
-    lastName: string;
-    nickname: string;
-    birthDate: Date;
-    stack: number;
-    wins: number;
-    totalGames: number;
-};
+import type { UserData } from "../../types"
 
 export default function OptionBar() {
     const [userData, setUserData] = useState<UserData | null>(null);
@@ -25,7 +16,10 @@ export default function OptionBar() {
         if (!userId || !port) return;
 
         axios.get(`http://localhost:${port}/auth/user/${userId}`)
-            .then((res) => {setUserData(res.data)})
+            .then((res) => {
+                setUserData(res.data);
+                localStorage.setItem("userData", JSON.stringify(res.data))
+            })
             .catch((err) => console.error("Error al obtener usuario:", err));
     }, []);
 

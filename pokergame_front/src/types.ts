@@ -1,5 +1,5 @@
 export type Lobby = {
-    _id: number,
+    _id: string,
     name: string,
     players: [],
     maxPlayers: number,
@@ -12,3 +12,13 @@ export type Lobby = {
     updatedAt: string,
     __v: number
 }
+
+export type UserData = {
+    name: string;
+    lastName: string;
+    nickname: string;
+    birthDate: Date;
+    stack: number;
+    wins: number;
+    totalGames: number;
+};

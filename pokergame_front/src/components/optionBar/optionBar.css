@@ -15,7 +15,14 @@
     margin: 0;
     text-align: center;
     justify-self: center;
-    /* redundante, pero ayuda */
+    font-size: 2rem;
+    user-select: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.option-bar h2:hover {
+    text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.389);
+    transform: scale(1.01);
 }
 
 .user_info {
@@ -43,7 +50,7 @@
     align-items: center;
 }
 
-.txtMenu .stack p{
+.txtMenu .stack p {
     margin: 0px;
 }
 
