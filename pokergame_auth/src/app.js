@@ -31,4 +31,3 @@ app.use("/auth", router);
 app.get("/auth/health", (_req, res) => res.json({ ok: true }));
 
 export default app;
-z
