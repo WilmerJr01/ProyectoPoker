@@ -35,7 +35,8 @@ export default function HomePage() {
         // --- Fetch automático ---
         const fetchLobbys = async () => {
             try {
-                const res = await axios.get("http://localhost:4000/api/tables/", {
+                const port = import.meta.env.VITE_PORT_BACK;
+                const res = await axios.get(`${port}/api/tables/`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setLobbys(res.data);

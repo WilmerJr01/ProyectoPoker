@@ -7,11 +7,10 @@ const ensureUserId = () => localStorage.getItem("userId") || undefined;
 export const createSocket = (): Socket => {
   if (socket) return socket;
 
-  const port = import.meta.env.VITE_PORT_BACK;
   const userId = ensureUserId();
+  const port = import.meta.env.VITE_PORT_BACK;
 
-  socket = io(`http://localhost:${port}`, {
-    transports: ["websocket"],
+  socket = io(port, {
     autoConnect: false,
     auth: { userId }, // 👈 userId va en el handshake
   });
