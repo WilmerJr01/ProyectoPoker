@@ -11,10 +11,12 @@ export class Carta {
 }
 
 export class Player {
-  constructor(nombre, mano, puntaje) {
+  constructor(nombre, mano, puntaje, fichas, bet) {
     this.nombre = nombre;
     this.mano = mano;
     this.puntaje = puntaje;
+    this.fichas = fichas;
+    this.bet = bet;
   }
 
   mostrarCartas() {
@@ -33,7 +35,7 @@ export class Mano {
   }
 }
 
-export class Mesa {
+export class mano_mesa {
   constructor(nombre, carta1, carta2, carta3, carta4, carta5, carta6, carta7) {
     this.nombre = nombre;
     this.cartas = [carta1, carta2, carta3, carta4, carta5, carta6, carta7];
@@ -44,5 +46,12 @@ export class Mesa {
   }
 }
 
+export class Mesa {
+  constructor(bet, mano, jugadores){
+    this.bet = bet 
+    this.mano = mano
+    this.jugadores = jugadores
+  }
+}
 
 
