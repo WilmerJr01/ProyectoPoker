@@ -1,0 +1,104 @@
+.option-bar {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 100%;
+    background-color: #3498db;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    font-family: 'Alan Sans', Arial, Helvetica, sans-serif;
+}
+
+.option-bar h2 {
+    grid-column: 2;
+    /* va en la columna central (auto) */
+    margin: 0;
+    text-align: center;
+    justify-self: center;
+    font-size: 2rem;
+    user-select: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.option-bar h2:hover {
+    text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.389);
+    transform: scale(1.01);
+}
+
+.user_info {
+    grid-column: 3;
+    /* a la derecha */
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.txtMenu .name {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.txtMenu .stack {
+    display: flex;
+    flex-direction: row;
+    font-size: 0.9rem;
+    color: rgb(216, 216, 216);
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.txtMenu .stack p {
+    margin: 0px;
+}
+
+.btnMenu {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.3s ease;
+}
+
+.btnMenu:hover {
+    transform: scale(1.2);
+}
+
+/* Backdrop de pantalla completa */
+.drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    /* top/right/bottom/left: 0 */
+    background: rgba(0, 0, 0, 0.45);
+    /* oscurece fondo */
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-end;
+    /* panel pegado a la derecha */
+}
+
+/* Panel deslizante (drawer) */
+.drawer-panel {
+    width: min(380px, 92vw);
+    height: 100vh;
+    /* todo el alto */
+    background: #0e0e14;
+    border-left: 3px solid #3498db;
+    box-shadow: -12px 0 30px rgba(0, 0, 0, 0.5);
+    transform: translateX(100%);
+    animation: drawerIn 250ms ease forwards;
+}
+
+@keyframes drawerIn {
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes drawerOut {
+    to {
+        transform: translateX(100%);
+    }
+}

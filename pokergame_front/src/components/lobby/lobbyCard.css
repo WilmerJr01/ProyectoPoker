@@ -87,7 +87,7 @@
 
 .body_Card .entryBtn button{
     padding: 5px;
-    background-color: rgb(2, 183, 2);
+    background-color: rgb(42, 146, 42);
     border: none;
     margin: 0px;
     align-items: center;
@@ -98,6 +98,11 @@
     border-radius: 15px;
     width: 90px;
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.body_Card .entryBtn button:hover{
+    background-color: rgb(34, 117, 34);
 }
 
 .body_Card .entryBtn button img{

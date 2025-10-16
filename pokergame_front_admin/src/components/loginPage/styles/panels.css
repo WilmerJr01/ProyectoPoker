@@ -1,0 +1,76 @@
+/* === Panel izquierdo === */
+.left_panel {
+    background-image: url('../../../assets/PokerFace.png');
+    /* Cambia la ruta según tu imagen */
+    background-size: cover;
+    /* Ajusta la imagen al tamaño del panel */
+    background-position: center;
+    /* Centra la imagen */
+    background-repeat: no-repeat;
+    /* No repite la imagen */
+    flex: 1;
+    border-radius: 20px 0px 0px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    position: relative;
+
+    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+    mask-image: linear-gradient(to right, black 80%, transparent 100%);
+}
+
+.left_panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(14, 14, 20, 0.437);
+    /* Fondo oscuro semitransparente */
+    z-index: 1;
+    pointer-events: none;
+    border-radius: 15px;
+    /* Igual que el panel */
+}
+
+/* Para que el contenido esté por encima del fondo opaco */
+.left_panel>* {
+    position: relative;
+    z-index: 2;
+}
+
+.left_panel h1 {
+    user-select: none;
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.816);
+
+    transition: all 0.3s ease;
+}
+
+.left_panel h1:hover {
+    transform: scale(1.05);
+}
+
+/* === Panel derecho === */
+.right_panel {
+    border: 3px solid #3498db;
+    border-radius: 15px;
+    background: #0e0e14;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    transform-origin: bottom right;
+    height: 450px;
+    width: 90%;
+    overflow: visible;
+    animation: deal-card 0.5s ease-out forwards;
+}
+
+.right_panel h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #ffffff;
+    user-select: none;
+}

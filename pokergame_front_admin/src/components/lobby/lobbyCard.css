@@ -1,0 +1,224 @@
+.body_Card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    border: 2px solid #3498db;
+    border-radius: 20px;
+    padding: 10px 30px;
+    column-gap: 10px;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    user-select: none;
+}
+
+/* Imagen a la izquierda */
+.body_Card .imgTable {
+    grid-column: 1;
+    justify-self: start;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+.body_Card .imgTable img {
+    height: 45px;
+    width: 70px;
+}
+
+/* Info centrada */
+.body_Card .infoTable {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.body_Card .infoTable .nameTable {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.body_Card .infoTable .nameTable h2 {
+    margin: 0px;
+    font-size: 1.3rem;
+}
+
+.body_Card .infoTable .blindsTable p,
+.body_Card .infoTable .nameTable p,
+.body_Card .infoTable p {
+    margin: 0px;
+    font-size: 0.9rem;
+    color: rgb(142, 142, 142);
+}
+.body_Card .infoTable p {
+    text-align: center;
+    margin-top: 3px;
+}
+
+.body_Card .infoTable .blindsTable {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.body_Card .infoTable .blindsTable img {
+    height: 30px;
+    width: 30px;
+}
+
+/* Botón a la derecha */
+.body_Card .entryBtn {
+    grid-column: 3;
+    justify-self: end;
+}
+
+.body_Card .entryBtn button {
+    padding: 5px;
+    background-color: #3498db;
+    border: none;
+    margin: 5px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-size: 1.1rem;
+    font-family: "Alan Sans";
+    border-radius: 15px;
+    width: 90px;
+    cursor: pointer;
+}
+
+.body_Card .entryBtn button img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Overlay base */
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: 1fr;
+    pointer-events: none;
+}
+
+/* Backdrop */
+.overlay__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    pointer-events: auto;
+}
+
+/* Drawer (panel centrado) */
+.drawer {
+    pointer-events: auto;
+    position: relative;
+    margin: auto;
+    width: min(720px, 92vw);
+    background: #0e0e14;
+    color: #fff;
+    border: 2px solid #3498db;
+    border-radius: 20px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+    padding: 18px;
+    z-index: 51;
+    animation: drawerIn 0.18s ease-out;
+}
+
+@keyframes drawerIn {
+    from {
+        transform: translateY(10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.drawer__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.drawer__close {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.drawer__content {
+    display: grid;
+    gap: 12px;
+}
+
+.grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+.grid2 label {
+    display: grid;
+    gap: 6px;
+}
+.grid2 input {
+    background: #141921;
+    color: #fff;
+    border: 1px solid #2b3952;
+    border-radius: 10px;
+    padding: 10px 12px;
+    outline: none;
+}
+.grid2 input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.drawer__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.btn--primary {
+    font-family: "Alan Sans";
+    border-radius: 12px;
+    padding: 10px 16px;
+    border: 2px solid #3498db;
+    background: #0e0e14;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+.btn--primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(52, 152, 219, 0.2);
+}
+.btn--primary {
+    background: #1a2433;
+}
+.btn--secondary {
+    border-color: #6c7a91;
+}
+
+.error {
+    color: #ff6b6b;
+    margin-top: 6px;
+}

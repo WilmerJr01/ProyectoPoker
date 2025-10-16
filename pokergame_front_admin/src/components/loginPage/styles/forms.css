@@ -1,0 +1,75 @@
+/* Formulario contenedor */
+.login_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 80%;
+}
+
+/* Inputs */
+.login_form input{
+    box-sizing: border-box;
+    /* evita saltos por el borde */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    width: 250px;
+    /* ancho base */
+    height: 40px;
+    background: #0e0e14;
+    color: #fff;
+    font-family: "Alan Sans", Arial, sans-serif;
+    font-size: 1rem;
+    /* Transiciones suaves */
+    transition: width 0.3s ease, border-color 0.3s, box-shadow 0.3s;
+}
+
+.login_form input:focus {
+    border: 2px solid #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+    width: 280px;
+    /* se expande suavemente */
+}
+
+/* Fila de password + icono */
+.password_row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    width: 250px;
+    transition: width 0.3s;
+}
+
+.password_row input {
+    flex: 2;
+}
+
+.password_row:focus-within {
+    width: 280px;
+}
+
+.password_row .icon_button_outside {
+    background: #0e0e14;
+    border: 2px solid #3498db;
+    border-radius: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    width: 40px;
+    height: 40px;
+    transition: all 0.2s;
+}
+
+.password_row .icon_button_outside:hover {
+    background: #2980b9;
+}
+
+.icon_img {
+    width: 20px;
+    height: 20px;
+}

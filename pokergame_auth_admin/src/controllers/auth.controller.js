@@ -96,3 +96,13 @@ export const verify = (req, res) => {
         res.json({ valid: false });
     }
 };
+
+export const getAdmin = async (req, res) => {
+    const { adminId } = req.params;
+    try {
+        const admin = await Admin.findById(adminId).select("-password -__v -createdAt -updatedAt -tables");
+        res.json(admin);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

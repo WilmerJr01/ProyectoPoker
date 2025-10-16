@@ -1,0 +1,119 @@
+.home-page {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+}
+
+.body_home {
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    font-family: "Alan Sans", Arial, sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    overflow-x: visible;
+    /* permite que la card “salga” al hacer scale */
+}
+
+.options_home {
+    display: flex;
+    grid-column: 1;
+    margin-left: 20px;
+    margin-top: 20px;
+    flex-direction: column;
+    margin-bottom: auto;
+    align-self: flex-start;
+    gap: 5px;
+}
+
+.options_home .select_option{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.507);
+    gap: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.options_home .select_option p{
+    margin: 0;
+    font-size: 1rem;
+    color: white;
+}
+
+.options_home .select_option img{
+    width: 25px;
+    height: 25px;
+}
+
+.options_home .create_new_option{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.507);
+    gap: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.options_home .create_new_option p{
+    margin: 0;
+    font-size: 1rem;
+    color: white;
+}
+
+.options_home .create_new_option img{
+    width: 25px;
+    height: 25px;
+}
+
+.options_home .select_option .table{
+    width: 40px;
+    height: 25px;
+}
+
+.option_selected_home {
+    grid-column: 2;
+    margin-bottom: auto;
+    margin: 10px;
+    align-self: flex-start;
+
+    /* 🔽 Hace scroll sólo dentro de este contenedor */
+    max-height: 85vh;
+    width: auto;
+    overflow-x: auto;
+    overflow-y: auto;
+
+    /* Scrollbar elegante */
+    scrollbar-width: thin;
+    scrollbar-color: #3498db transparent;
+}
+
+/* Scrollbar (para Chrome, Edge, Safari) */
+.option_selected_home::-webkit-scrollbar {
+    width: 8px;
+}
+
+.option_selected_home::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 10px;
+}
+
+.option_selected_home::-webkit-scrollbar-thumb:hover {
+    background: #217dbb;
+}
+
+.option_selected_home ul{
+    margin: 0px;
+    padding-inline-start: 0px;
+}

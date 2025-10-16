@@ -1,0 +1,20 @@
+/* Botón enviar formulario */
+.login_form .sendBtn {
+    background-color: #0e0e14;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1.2rem;
+    font-family: "Alan Sans", Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    height: 45px;
+    width: 150px;
+    transition: background 0.3s, color 0.3s, border-radius 0.3s;
+}
+
+.login_form .sendBtn:hover {
+    background-color: #2980b9;
+    color: #0e0e14;
+    border-radius: 12px;
+}
