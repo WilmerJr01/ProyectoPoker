@@ -40,7 +40,7 @@ export const register = async (req, res) => {
         await user.save();
 
         res.json({ token, userId: user._id });
-    
+
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
@@ -94,5 +94,16 @@ export const verify = (req, res) => {
         res.json({ valid: true, user: decoded });
     } catch {
         res.json({ valid: false });
+    }
+};
+
+// Obtener datos de un usuario
+export const getUser = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const user = await User.findById(userId).select("-password -__v -createdAt -updatedAt");
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 };

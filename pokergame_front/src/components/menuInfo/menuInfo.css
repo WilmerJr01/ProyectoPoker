@@ -1,0 +1,121 @@
+.menu-info-content {
+    height: 95%;
+    padding: 16px 18px 20px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    font-family: 'Alan Sans';
+    font-size: 1.1rem;
+}
+
+.menu-info-content .user {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 2px;
+    transition: all 0.3s ease-in-out;
+}
+
+.menu-info-content .user h3 {
+    margin: 0px;
+    color: #3498db;
+    transition: all 0.3s ease-in-out;
+    user-select: none;
+    font-size: 1.5rem;
+    align-items: center;
+}
+
+.menu-info-content .user:hover {
+    transform: translateX(5px);
+}
+
+.menu-info-content .user:hover h3 {
+    text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.389);
+    color: #fff;
+}
+
+.menu-info-content p {
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 2px;
+    transition: all 0.3s ease-in;
+    user-select: none;
+}
+
+.menu-info-content p:hover {
+    transform: translateX(5px);
+}
+
+.menu-info-content p strong {
+    font-size: 0.95rem;
+    color: rgb(142, 142, 142);
+}
+
+.close-drawer {
+    align-self: flex-end;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+}
+
+.close-drawer:hover {
+    transform: scale(1.1);
+
+}
+
+.close-drawer img {
+    height: 30px;
+    width: 30px;
+}
+
+.user {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-content: center;
+}
+
+.user img {
+    height: 40px;
+    width: 40px;
+}
+
+.user h3 {
+    align-content: center;
+    margin: 0px;
+    font-size: 1.3rem;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #ffffff;
+    margin: 12px 0;
+}
+
+.exitBtn {
+    margin-top: auto;
+    background-color: red;
+    align-self: flex-end;
+    border: 0;
+    border-radius: 30px;
+    cursor: pointer;
+    height: 45px;
+    width: 45px;
+    transition: all 0.3s ease;
+}
+
+.exitBtn:hover {
+    transform: scale(1.1);
+}
+
+.exitBtn img {
+    height: 30px;
+    width: 30px;
+}

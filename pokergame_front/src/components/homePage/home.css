@@ -1,0 +1,64 @@
+.home-page {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+}
+
+.body_home {
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    font-family: "Alan Sans", Arial, sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    overflow-x: visible;
+    /* permite que la card “salga” al hacer scale */
+}
+
+.lobbys {
+    grid-column: 2;
+    margin: 0;
+    margin-bottom: auto;
+    align-self: flex-start;
+
+    /* 🔽 Hace scroll sólo dentro de este contenedor */
+    max-height: 90vh;
+    width: auto;
+    overflow-x: visible;
+    overflow-y: auto;
+
+    /* Scrollbar elegante */
+    scrollbar-width: thin;
+    scrollbar-color: #3498db transparent;
+}
+
+/* Scrollbar (para Chrome, Edge, Safari) */
+.lobbys::-webkit-scrollbar {
+    width: 8px;
+}
+
+.lobbys::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 10px;
+}
+
+.lobbys::-webkit-scrollbar-thumb:hover {
+    background: #217dbb;
+}
+
+.count_lobbys {
+    display: flex;
+    background-color: rgb(60, 48, 48);
+    justify-content: center;
+}
+
+.count_lobbys h1 {
+    font-size: 0.8rem;
+    font-family: 'Alan Sans';
+    margin: 2px;
+}

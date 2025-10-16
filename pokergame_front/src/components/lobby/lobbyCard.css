@@ -1,0 +1,106 @@
+.body_Card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    border: 2px solid #3498db;
+    border-radius: 20px;
+    padding: 10px 30px;
+    column-gap: 10px;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    user-select: none;
+    margin-left: 18px;
+    margin-right: 18px;
+}
+
+.body_Card:hover{
+    transform: scale(1.03);
+}
+
+/* Imagen a la izquierda */
+.body_Card .imgTable {
+    grid-column: 1;
+    justify-self: start;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+.body_Card .imgTable img {
+    height: 45px;
+    width: 70px;
+}
+
+/* Info centrada */
+.body_Card .infoTable {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.body_Card .infoTable .nameTable {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.body_Card .infoTable .nameTable h2 {
+    margin: 0px;
+    font-size: 1.3rem;
+}
+
+.body_Card .infoTable .blindsTable p,
+.body_Card .infoTable .nameTable p,
+.body_Card .infoTable p {
+    margin: 0px;
+    font-size: 0.9rem;
+    color: rgb(142, 142, 142);
+}
+.body_Card .infoTable p{
+    text-align: center;
+    margin-top: 3px;
+}
+
+.body_Card .infoTable .blindsTable {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.body_Card .infoTable .blindsTable img {
+    height: 30px;
+    width: 30px;
+}
+
+/* Botón a la derecha */
+.body_Card .entryBtn {
+    grid-column: 3;
+    justify-self: end;
+}
+
+.body_Card .entryBtn button{
+    padding: 5px;
+    background-color: rgb(2, 183, 2);
+    border: none;
+    margin: 0px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-size: 1.1rem;
+    font-family: 'Alan Sans';
+    border-radius: 15px;
+    width: 90px;
+    cursor: pointer;
+}
+
+.body_Card .entryBtn button img{
+    width: 30px;
+    height: 30px;
+}

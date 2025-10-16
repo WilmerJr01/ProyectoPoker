@@ -6,7 +6,7 @@ export function mejor_mano(jugadores){
         console.log('-----------------------------')
         console.log(`EL GANADOR ES EL JUGADOR ${jugadores[jugadores.length-1].nombre}`)
         console.log('-----------------------------')
-        return jugadores[jugadores.length-1]
+        return [jugadores[jugadores.length-1], 1]
     } else {
         const puntaje_mas_alto = jugadores[jugadores.length-1].puntaje;
         //players with the same hand
@@ -42,12 +42,12 @@ export function desempate_escaleras(jugadores){
         console.log('-----------------------------')
         console.log(`EL GANADOR ES EL JUGADOR ${jugadores[0].nombre}`)
         console.log('-----------------------------')
-        return jugadores[0]
+        return [jugadores[0], 1]
     } else {
         console.log('---------------------------------------')
         console.log(`EMPATE`)
         console.log('---------------------------------------')
-        return jugadores
+        return [jugadores, jugadores.length]
     }   
 }
 
@@ -67,11 +67,11 @@ export function desempate_pares(jugadores){
         console.log('-----------------------------')
         console.log(`EL GANADOR ES EL JUGADOR ${jugadores[0].nombre}`)
         console.log('-----------------------------')
-        return jugadores[0]
+        return [jugadores[0], 1]
     } else {
         console.log('---------------------------------------')
         console.log(`EMPATE`)
         console.log('---------------------------------------')
-        return jugadores
+        return [jugadores, jugadores.length]
     }   
 }
