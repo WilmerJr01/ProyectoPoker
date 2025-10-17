@@ -94,6 +94,22 @@ export default function LobbyCard({ lobby, onUpdated }: LobbyCardProps) {
         }
     };
 
+    const deleteLobby = async () => {
+        if (!confirm(`¿Seguro que deseas eliminar la mesa "${lobby.name}"?`)) return;
+
+        try {
+            await axios.delete(`${API_BASE}/api/tables/${lobby._id}`, {
+                headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+            });
+            window.location.reload();
+        } catch (err: any) {
+            setErrorMsg(
+                err?.response?.data?.message || "Error al eliminar la mesa"
+            );
+        }
+    };
+
+
     return (
         <>
             <div className="body_Card">
@@ -121,7 +137,7 @@ export default function LobbyCard({ lobby, onUpdated }: LobbyCardProps) {
                     <button onClick={handleJoinClick}>
                         Edit
                     </button>
-                    <button onClick={handleJoinClick}>
+                    <button onClick={deleteLobby}>
                         Delete
                     </button>
                 </div>

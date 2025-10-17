@@ -2,25 +2,31 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import OptionBar from "../optionBar/optionBar";
+import LobbyCard from "../lobby/lobbyCard";
+import NewTableDrawer from "../lobby/newTableDrawer"; // 👈 importar nuevo componente
+import NewUserDrawer from "../lobby/newUserDrawer";
 import retiroIcon from "../../assets/retirosIcon.svg";
 import recargaIcon from "../../assets/recargaIcon.svg";
 import userIcon from "../../assets/userIcon.svg";
 import tableIcon from "../../assets/tableIcon.png";
 import addIcon from "../../assets/addIcon.svg";
-import LobbyCard from "../lobby/lobbyCard";
-import type { Lobby } from "../../types";
+import UserCard from "../user/userCard";
+import type { Lobby, User } from "../../types";
 import "./home.css";
 
 export default function HomePage() {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const [lobbys, setLobbys] = useState<Lobby[]>([]);
-    const [option, setOption] = useState<string>("table"); // si quieres que cargue mesas por defecto
+    const [users, setUsers] = useState<User[]>([]);
+    const [option, setOption] = useState<string>("table");
+    const [drawerOpen1, setDrawerOpen1] = useState(false); // 👈 estado para el drawer
+    const [drawerOpen2, setDrawerOpen2] = useState(false); // 👈 estado para el drawer
+
 
     const backPort = import.meta.env.VITE_PORT_BACK;
     const authPort = import.meta.env.VITE_PORT_AUTH;
 
-    // ✅ Verificar token UNA sola vez
     useEffect(() => {
         if (!token) {
             navigate("/login");
@@ -33,44 +39,38 @@ export default function HomePage() {
             .catch(() => navigate("/login"));
     }, [authPort, navigate, token]);
 
-    const createNew = (option: string) => {
-        switch (option) {
-            case "user":
-                alert("Crear user")
-                break;
-            case "table":
-                alert("Crear table")
-                break;
-            case "admin":
-                alert("Crear admin")
-                break;
+    const fetchLobbys = async () => {
+        try {
+            const res = await axios.get(`${backPort}/api/tables/`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setLobbys(res.data);
+        } catch (err) {
+            console.error("Error al obtener los lobbys:", err);
+        }
+    };
+
+    const fetchUsers = async () => {
+        try {
+            const res = await axios.get(`${backPort}/api/user/`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setUsers(res.data);
+        } catch (err) {
+            console.error("Error al obtener los lobbys:", err);
         }
     }
 
-    // ✅ Cargar lobbys SOLO cuando option === "table" (y no en cada render)
     useEffect(() => {
-        if (option !== "table") return;
+        if (option === "table") fetchLobbys();
+        if (option === "user") fetchUsers();
+    }, [option]);
 
-        const ac = new AbortController();
-
-        const load = async () => {
-            try {
-                const res = await axios.get(`${backPort}/api/tables/`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                    signal: ac.signal as any, // axios soporta AbortController moderno
-                });
-                setLobbys(res.data);
-            } catch (err: any) {
-                if (axios.isCancel(err)) return;
-                console.error("Error al obtener los lobbys:", err);
-            }
-        };
-
-        load();
-
-
-        return () => ac.abort();
-    }, [option, backPort, token]);
+    const createNew = (option: string) => {
+        if (option === "table") setDrawerOpen1(true);
+        if (option === "user") setDrawerOpen2(true);
+        else alert(`Crear ${option} (pendiente)`);
+    };
 
     return (
         <div className="home-page">
@@ -78,39 +78,35 @@ export default function HomePage() {
 
             <div className="body_home">
                 <div className="options_home">
+                    {/* opciones */}
                     <div onClick={() => setOption("user")} className="select_option">
                         <img src={userIcon} />
                         <p>Users</p>
                     </div>
-
                     <div onClick={() => setOption("admin")} className="select_option">
                         <img src={userIcon} />
                         <p>Admin</p>
                     </div>
-
                     <div onClick={() => setOption("table")} className="select_option">
                         <img className="table" src={tableIcon} />
                         <p>Tables</p>
                     </div>
-
                     <div onClick={() => setOption("top up")} className="select_option">
                         <img src={recargaIcon} />
                         <p>Top Up</p>
                     </div>
-
                     <div onClick={() => setOption("withdrawals")} className="select_option">
                         <img src={retiroIcon} />
                         <p>Withdrawals</p>
                     </div>
                     <hr />
-                    {option === "user" || option === "table" || option === "admin" ? (
+
+                    {["user", "table", "admin"].includes(option) && (
                         <div onClick={() => createNew(option)} className="create_new_option">
                             <img src={addIcon} />
                             <p>New {option}</p>
-                        </div>) : null
-                    }
-
-
+                        </div>
+                    )}
                 </div>
 
                 <div className="option_selected_home">
@@ -121,9 +117,7 @@ export default function HomePage() {
                                     <LobbyCard
                                         key={l._id}
                                         lobby={l}
-                                        onUpdated={(updated) => {
-                                            setLobbys(prev => prev.map(x => x._id === updated._id ? updated : x));
-                                        }}
+                                        onUpdated={() => fetchLobbys()}
                                     />
                                 ))}
                             </ul>
@@ -131,7 +125,16 @@ export default function HomePage() {
                             <p>No hay mesas disponibles.</p>
                         )
                     ) : option === "user" ? (
-                        <p>Users...</p>
+                        users.length > 0 ? (
+                            <ul>
+                                {users.map((u) => (
+                                    <UserCard key={u._id} user={u} onUpdated={fetchUsers} />
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No hay usuarios disponibles.</p>
+                        )
+
                     ) : option === "top up" ? (
                         <p>Top Up...</p>
                     ) : option === "withdrawals" ? (
@@ -141,6 +144,15 @@ export default function HomePage() {
                     ) : null}
                 </div>
             </div>
+
+            {/* Drawer para crear mesa */}
+            <NewTableDrawer
+                open={drawerOpen1}
+                onClose={() => setDrawerOpen1(false)}
+                onCreated={fetchLobbys}
+            />
+
+            <NewUserDrawer open={drawerOpen2} onClose={() => (setDrawerOpen2(false))} onCreated={fetchUsers} />
         </div>
     );
 }
