@@ -26,8 +26,7 @@ export default function HomePage() {
             navigate("/login");
             return;
         }
-        axios
-            .post(`${authPort}/auth/verify`, { token })
+        axios.post(`${authPort}/auth/verify`, { token })
             .then((res) => {
                 if (!res.data.valid) navigate("/login");
             })

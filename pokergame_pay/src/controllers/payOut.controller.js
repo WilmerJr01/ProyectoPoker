@@ -1,17 +1,25 @@
 // controllers/payout.controller.js
 import PayOut from "../models/PayOut.js";
+import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config()
 
 // ✅ Crear retiro (PayOut)
 export const createPayOut = async (req, res) => {
     try {
-        const { user, amount, cardNumber, notes } = req.body;
+        const { user, amount, cardNumber, notes, token, stackinicial } = req.body;
 
-        // Validación básica
-        if (!user || !amount || !cardNumber) {
+        if (!user || !amount || !cardNumber || !token || !stackinicial) {
             return res.status(400).json({
                 message:
-                    "Los campos 'user', 'amount' y 'cardNumber' son obligatorios",
+                    "Los campos 'user', 'amount', 'cardNumber', 'token' y 'stack' son obligatorios",
             });
+        }
+        const { verify } = await axios.post(`${process.env.URL_AUTH}/auth/verify`, { token })
+
+        if (!verify?.valid) {
+            return res.status(400).json({ message: "Token no valido" })
         }
 
         const payOut = new PayOut({
@@ -22,7 +30,15 @@ export const createPayOut = async (req, res) => {
         });
 
         await payOut.save();
+
+        const { update } = await axios.put(`${process.env.URL_API}/api/user/${user}`, { "stack": (stackinicial - amount) })
+
+        if (!update) {
+            return res.status(400).json({ message: "No se realizó el retiro usuario" })
+        }
+
         res.status(201).json(payOut);
+
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -45,32 +61,6 @@ export const getPayOutById = async (req, res) => {
         if (!payOut)
             return res.status(404).json({ message: "Retiro no encontrado" });
         res.json(payOut);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-// ✅ Actualizar retiro
-export const updatePayOut = async (req, res) => {
-    try {
-        const payOut = await PayOut.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-        });
-        if (!payOut)
-            return res.status(404).json({ message: "Retiro no encontrado" });
-        res.json(payOut);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-};
-
-// ✅ Eliminar retiro
-export const deletePayOut = async (req, res) => {
-    try {
-        const payOut = await PayOut.findByIdAndDelete(req.params.id);
-        if (!payOut)
-            return res.status(404).json({ message: "Retiro no encontrado" });
-        res.json({ message: "Retiro eliminado con éxito" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
