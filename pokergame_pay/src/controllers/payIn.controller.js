@@ -17,7 +17,7 @@ export const createPayIn = async (req, res) => {
         }
         const { verify } = await axios.post(`${process.env.URL_AUTH}/auth/verify`, { token })
 
-        if (!verify?.valid) {
+        if (verify?.valid) {
             return res.status(400).json({ message: "Token no valido" })
         }
 
