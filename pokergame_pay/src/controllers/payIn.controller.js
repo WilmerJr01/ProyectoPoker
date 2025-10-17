@@ -30,15 +30,11 @@ export const createPayIn = async (req, res) => {
 
         await payIn.save();
 
-        const { update } = await axios.put(`${process.env.URL_API}/api/user/${user}`,
+        axios.put(`${process.env.URL_API}/api/user/${user}`,
             { "stack": (stackinicial + amount) },
             {
                 headers: { Authorization: `Bearer ${token}` }
             })
-
-        if (!update) {
-            return res.status(400).json({ message: "No se realizó el retiro usuario" })
-        }
 
         res.status(201).json(payIn);
     } catch (error) {
