@@ -42,6 +42,7 @@ export default function MenuInfo({ user, onClose }: { user: UserData; onClose: (
             <p><strong>Games:</strong> <img src={matchIcon} /> {user.totalGames}</p>
 
             <hr />
+            <button className='payBtn' onClick={()  => {navigate("/pay")}}> Top Up / Withdrawals</button>
             <button onClick={logOut} className='exitBtn'><img src={exitIcon} alt="Exit" /></button>
 
         </div>

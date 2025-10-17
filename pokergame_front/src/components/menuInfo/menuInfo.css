@@ -6,7 +6,7 @@
     flex-direction: column;
     gap: 8px;
     overflow-y: auto;
-    font-family: 'Alan Sans';
+    font-family: "Alan Sans";
     font-size: 1.1rem;
 }
 
@@ -67,7 +67,6 @@
 
 .close-drawer:hover {
     transform: scale(1.1);
-
 }
 
 .close-drawer img {
@@ -97,6 +96,24 @@ hr {
     border: 0;
     border-top: 1px solid #ffffff;
     margin: 12px 0;
+}
+
+.payBtn {
+    background-color: #3498DB;
+    border: 0;
+    border-radius: 30px;
+    cursor: pointer;
+    height: auto;
+    width: auto;
+    padding: 15px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    font-family: 'Alan Sans';
+    align-self: center;
+}
+
+.payBtn:hover {
+    transform: scale(1.1);
 }
 
 .exitBtn {

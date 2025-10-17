@@ -13,6 +13,19 @@ export type Lobby = {
     __v: number
 }
 
+export interface Admin {
+    _id: string;
+    name: string;
+    lastName: string;
+    nickname: string;
+    password?: string;
+    rol: string;
+    tables?: string[];
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+
 export interface User {
     _id: string;
     name: string;

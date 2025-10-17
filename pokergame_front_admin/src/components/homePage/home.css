@@ -31,6 +31,9 @@
     gap: 5px;
 }
 
+.option_selected_home h1{
+    text-align: center;
+}
 .options_home .select_option{
     display: flex;
     flex-direction: row;

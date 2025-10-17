@@ -5,13 +5,15 @@ import OptionBar from "../optionBar/optionBar";
 import LobbyCard from "../lobby/lobbyCard";
 import NewTableDrawer from "../lobby/newTableDrawer"; // 👈 importar nuevo componente
 import NewUserDrawer from "../lobby/newUserDrawer";
+import NewAdminDrawer from "../lobby/newAdminDrawer";
 import retiroIcon from "../../assets/retirosIcon.svg";
 import recargaIcon from "../../assets/recargaIcon.svg";
 import userIcon from "../../assets/userIcon.svg";
 import tableIcon from "../../assets/tableIcon.png";
 import addIcon from "../../assets/addIcon.svg";
 import UserCard from "../user/userCard";
-import type { Lobby, User } from "../../types";
+import AdminCard from "../admin/adminCard";
+import type { Lobby, User, Admin } from "../../types";
 import "./home.css";
 
 export default function HomePage() {
@@ -19,9 +21,12 @@ export default function HomePage() {
     const token = localStorage.getItem("token");
     const [lobbys, setLobbys] = useState<Lobby[]>([]);
     const [users, setUsers] = useState<User[]>([]);
-    const [option, setOption] = useState<string>("table");
+    const [admins, setAdmins] = useState<Admin[]>([]);
+    const [option, setOption] = useState<string>(" ");
     const [drawerOpen1, setDrawerOpen1] = useState(false); // 👈 estado para el drawer
     const [drawerOpen2, setDrawerOpen2] = useState(false); // 👈 estado para el drawer
+    const [drawerOpen3, setDrawerOpen3] = useState(false); // 👈 estado para el drawer
+
 
 
     const backPort = import.meta.env.VITE_PORT_BACK;
@@ -61,15 +66,28 @@ export default function HomePage() {
         }
     }
 
+    const fetchAdmins = async () => {
+        try {
+            const res = await axios.get(`${backPort}/api/admin/`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setAdmins(res.data)
+        } catch (err) {
+            console.error("Error al obtener los admin:", err);
+
+        }
+    }
+
     useEffect(() => {
         if (option === "table") fetchLobbys();
         if (option === "user") fetchUsers();
+        if (option === "admin") fetchAdmins();
     }, [option]);
 
     const createNew = (option: string) => {
         if (option === "table") setDrawerOpen1(true);
         if (option === "user") setDrawerOpen2(true);
-        else alert(`Crear ${option} (pendiente)`);
+        if (option == "admin") setDrawerOpen3(true);
     };
 
     return (
@@ -122,7 +140,7 @@ export default function HomePage() {
                                 ))}
                             </ul>
                         ) : (
-                            <p>No hay mesas disponibles.</p>
+                            <p>No table register</p>
                         )
                     ) : option === "user" ? (
                         users.length > 0 ? (
@@ -132,7 +150,7 @@ export default function HomePage() {
                                 ))}
                             </ul>
                         ) : (
-                            <p>No hay usuarios disponibles.</p>
+                            <p>No user register</p>
                         )
 
                     ) : option === "top up" ? (
@@ -140,19 +158,34 @@ export default function HomePage() {
                     ) : option === "withdrawals" ? (
                         <p>Withdrawals...</p>
                     ) : option === "admin" ? (
-                        <p>Admins...</p>
-                    ) : null}
+                        (
+                            admins.length > 0 ? (
+                                <ul>
+                                    {admins.map((a) => (
+                                        <AdminCard
+                                            key={a._id}
+                                            admin={a}
+                                            onUpdated={(updated) =>
+                                                setAdmins((prev) =>
+                                                    prev.map((x) => (x._id === updated._id ? updated : x))
+                                                )
+                                            }
+                                        />
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p >No admin register</p>
+                            )
+                        )
+                    ) : <h1>Select option...</h1>}
                 </div>
             </div>
 
             {/* Drawer para crear mesa */}
-            <NewTableDrawer
-                open={drawerOpen1}
-                onClose={() => setDrawerOpen1(false)}
-                onCreated={fetchLobbys}
-            />
-
+            <NewTableDrawer open={drawerOpen1} onClose={() => setDrawerOpen1(false)} onCreated={fetchLobbys} />
             <NewUserDrawer open={drawerOpen2} onClose={() => (setDrawerOpen2(false))} onCreated={fetchUsers} />
+            <NewAdminDrawer open={drawerOpen3} onClose={() => (setDrawerOpen3(false))} onCreated={fetchAdmins} />
+
         </div>
     );
 }
