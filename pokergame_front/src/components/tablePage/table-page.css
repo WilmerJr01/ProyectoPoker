@@ -1,0 +1,78 @@
+.page-felt-bg {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: radial-gradient(
+        120% 120% at 30% 20%,
+        #364b3f 0%,
+        #064e3b 55%,
+        #052e2a 100%
+    );
+}
+.table-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.table-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    color: white;
+}
+.table-name {
+    text-align: center;
+    flex: 1;
+    font-size: 22px;
+    font-weight: 700;
+}
+.chat-box {
+    width: 160px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.exit-btn {
+    background: #7f1d1d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.action-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 72px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(0, 0, 0, 0.25);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.35);
+}
+.btn {
+    border: none;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+}
+.action-fold {
+    background: #991b1b;
+}
+.action-check {
+    background: #1f2937;
+}
+.action-bet {
+    background: #065f46;
+}

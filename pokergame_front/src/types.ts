@@ -22,3 +22,26 @@ export type UserData = {
     wins: number;
     totalGames: number;
 };
+
+export type Seat = {
+    seatIndex: number;
+    id: string;
+    nickname: string;
+    stack: number;
+    isHero: boolean;
+};
+
+export type PokerTableProps = {
+    seats: Seat[]; // order determines position around the table
+};
+
+export type tableData = {
+    id: string;
+    name: string;
+    maxPlayers: number;
+    minBuyIn: number;
+    maxBuyIn: number;
+    bigBlind: number;
+    smallBlind: number;
+    gamesPlayed: string[];
+}
