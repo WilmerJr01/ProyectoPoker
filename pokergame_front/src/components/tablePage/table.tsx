@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { createSocket, joinTable, leaveTable } from "../../socket";
-import type { UserData, Seat, tableData } from "../../types";
+import type { Seat, tableData } from "../../types";
 import PokerTable from "./PokerTable";
 import ChatWidget from "../chatwidget/chatwiget";
 import "./table-page.css";
@@ -10,11 +10,20 @@ import "./table-page.css";
 export default function TablePage() {
     const { id: tableId } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const tableData = JSON.parse(localStorage.getItem("tableData") || "null") as tableData | null;
 
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId") || "";
-    const tableData = JSON.parse(localStorage.getItem("tableData") || "null") as tableData | null;
-    const [userData, setUserData] = useState<UserData | null>(null);
+    const [seats, setSeats] = useState<Seat[]>(() => {
+        const maxSeats = tableData?.maxPlayers ?? 9;
+        return Array.from({ length: maxSeats }).map((_, i) => ({
+            id: "",
+            nickname: "",
+            stack: 0,
+            isHero: false,
+            seatIndex: i,
+        }));
+    });
     const [players, setPlayers] = useState<string[]>([]);
     const [isMyTurn, setIsMyTurn] = useState(false);
 
@@ -32,10 +41,6 @@ export default function TablePage() {
                 if (!res.data.valid) navigate("/login");
             })
             .catch(() => navigate("/login"));
-
-        axios.get(`${port}/auth/user/${userId}`).then((res) => {
-            setUserData(res.data);
-        });
 
         const socket = createSocket();
 
@@ -62,27 +67,70 @@ export default function TablePage() {
         };
     }, [tableId, navigate, token, userId]);
 
-    const seats: Seat[] = useMemo(() => {
+    useEffect(() => {
+        let mounted = true;
         const maxSeats = tableData?.maxPlayers ?? 9;
-        if (players.length === 0)
-            return Array.from({ length: maxSeats }).map((_, i) => ({ seatIndex: i }));
+
+        if (players.length === 0) {
+            if (mounted) {
+                setSeats(
+                    Array.from({ length: maxSeats }).map((_, i) => ({
+                        id: "",
+                        nickname: "",
+                        stack: 0,
+                        isHero: false,
+                        seatIndex: i,
+                    }))
+                );
+            }
+            return () => {
+                mounted = false;
+            };
+        }
 
         const heroIdx = players.findIndex((p) => p === userId);
         const ordered = heroIdx === -1 ? players : [...players.slice(heroIdx), ...players.slice(0, heroIdx)];
 
-        return Array.from({ length: maxSeats }).map((_, i) => {
-            let id;
-            let nickname;
-            let stack;
-            axios.get(`${import.meta.env.VITE_PORT_AUTH}/auth/user/${ordered[i]}`).then((res) => {
-                nickname = res.data.nickname;
-                stack = res.data.stack;
-                id = res.data.id;
+        (async () => {
+            const fetched = await Promise.all(
+                ordered.map(async (pid) => {
+                    try {
+                        const res = await axios.get(`${import.meta.env.VITE_PORT_AUTH}/auth/user/${pid}`);
+                        return res.data;
+                    } catch {
+                        return null;
+                    }
+                })
+            );
+
+            const seatsArr: Seat[] = Array.from({ length: maxSeats }).map((_, i) => {
+                const u = fetched[i];
+                if (!u) {
+                    return {
+                        id: "",
+                        nickname: "",
+                        stack: 0,
+                        isHero: false,
+                        seatIndex: i,
+                    };
+                }
+                const isHero = u._id === userId;
+                return {
+                    id: u._id,
+                    nickname: u.nickname ?? "",
+                    stack: u.stack ?? 0,
+                    isHero,
+                    seatIndex: i,
+                };
             });
-            const isHero = !!nickname && !!nickname && nickname === userData?.name;
-            return { seatIndex: i, ordered[i], nickname, stack, isHero };
-        });
-    }, [players, tableData, userData?.name]);
+
+            if (mounted) setSeats(seatsArr);
+        })();
+
+        return () => {
+            mounted = false;
+        };
+    }, [players, tableData?.maxPlayers, userId]);
 
     const onFold = () => createSocket().emit("action:send", { tableId, action: "fold" });
     const onCheck = () => createSocket().emit("action:send", { tableId, action: "check" });
