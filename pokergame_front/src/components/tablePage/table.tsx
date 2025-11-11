@@ -139,13 +139,17 @@ export default function TablePage() {
         const amount = Number(size ?? 0) || 0;
         createSocket().emit("action:send", { tableId, action: "bet", amount });
     };
+    const exit = () => {
+        navigate("/home");
+        leaveTable(tableId || "");
+    }
 
     return (
         <div className="table-page page-felt-bg">
             <header className="table-top">
                 <div className="top-left-spacer" />
                 <h1 className="table-name">{tableId}</h1>
-                <button className="exit-btn" onClick={() => navigate("/home")}>Exit</button>
+                <button className="exit-btn" onClick={exit}>Exit</button>
             </header>
 
             <main className="table-main">
