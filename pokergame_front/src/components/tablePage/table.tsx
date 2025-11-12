@@ -54,6 +54,7 @@ export default function TablePage() {
 
         socket.on("players:update", ({ players }: { tableId: string; players: string[] }) => {
             setPlayers(players);
+            console.log(players)
         });
 
         socket.on("turn:active", ({ playerId }: { playerId: string }) => {
