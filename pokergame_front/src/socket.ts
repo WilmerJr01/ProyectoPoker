@@ -1,4 +1,5 @@
 import { io, Socket } from "socket.io-client";
+import type { LeaveAck } from "./types";
 
 let socket: Socket | null = null;
 
@@ -65,16 +66,23 @@ export const joinTable = async (
   });
 };
 
-export const leaveTable = async (
-  tableId: string
-): Promise<{ ok: boolean; error?: string }> => {
+export const leaveTable = async (tableId: string): Promise<LeaveAck> => {
   if (!socket) return { ok: false, error: "Socket no inicializado" };
-  await ensureConnected(); // opcional
+
+  if (!socket.connected) {
+    try {
+      await ensureConnected();
+    } catch (err) {
+      return { ok: false, error: "No se pudo reconectar el socket" };
+    }
+  }
+
   return new Promise((resolve) => {
-    socket!.emit("leaveTable", tableId, (ack: { ok: boolean; error?: string }) => {
+    socket?.emit("leaveTable", tableId, (ack: LeaveAck) => {
       if (ack.ok) console.log(`🚪 Saliste de la mesa ${tableId}`);
       else console.error("⚠️ Error al salir:", ack.error);
       resolve(ack);
     });
   });
 };
+

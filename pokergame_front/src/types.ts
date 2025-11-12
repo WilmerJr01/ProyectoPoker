@@ -45,3 +45,9 @@ export type tableData = {
     smallBlind: number;
     gamesPlayed: string[];
 }
+
+export interface LeaveAck {
+    ok: boolean;
+    error?: string;
+    remainingPlayers?: string[];
+}
