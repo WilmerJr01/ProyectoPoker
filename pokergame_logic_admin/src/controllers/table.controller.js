@@ -1,8 +1,5 @@
 import Table from "../models/Table.js";
 
-// Crear mesa
-import Table from "../models/Table.js";
-
 export const createTable = async (req, res) => {
     try {
         let {

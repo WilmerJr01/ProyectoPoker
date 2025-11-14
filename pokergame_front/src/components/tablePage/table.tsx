@@ -81,7 +81,12 @@ export default function TablePage() {
 
         const handleTurnActive = ({ playerId }: { playerId: string }) => {
             if (!mounted) return;
-            setIsMyTurn(playerId === userId);
+            if (!playerId || playerId === "" || playerId !== userId) {
+                setIsMyTurn(false);
+                return;
+            } else if (playerId === userId){
+                setIsMyTurn(true);
+            }
         };
 
         socket.on("players:update", handlePlayersUpdate);
@@ -195,9 +200,9 @@ export default function TablePage() {
             </main>
 
             <nav className="action-bar">
-                <button className="btn action-fold" onClick={onFold} disabled={isMyTurn}>Fold</button>
-                <button className="btn action-check" onClick={onCheck} disabled={isMyTurn}>Check</button>
-                <button className="btn action-bet" onClick={onBet} disabled={isMyTurn}>Bet</button>
+                <button className="btn action-fold" onClick={onFold} disabled={!isMyTurn}>Fold</button>
+                <button className="btn action-check" onClick={onCheck} disabled={!isMyTurn}>Check</button>
+                <button className="btn action-bet" onClick={onBet} disabled={!isMyTurn}>Bet</button>
             </nav>
 
             {/* Chat abajo a la derecha */}
