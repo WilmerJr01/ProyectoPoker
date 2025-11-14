@@ -195,9 +195,9 @@ export default function TablePage() {
             </main>
 
             <nav className="action-bar">
-                <button className="btn action-fold" onClick={onFold} disabled={!isMyTurn}>Fold</button>
-                <button className="btn action-check" onClick={onCheck} disabled={!isMyTurn}>Check</button>
-                <button className="btn action-bet" onClick={onBet} disabled={!isMyTurn}>Bet</button>
+                <button className="btn action-fold" onClick={onFold} disabled={isMyTurn}>Fold</button>
+                <button className="btn action-check" onClick={onCheck} disabled={isMyTurn}>Check</button>
+                <button className="btn action-bet" onClick={onBet} disabled={isMyTurn}>Bet</button>
             </nav>
 
             {/* Chat abajo a la derecha */}
