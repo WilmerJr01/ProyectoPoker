@@ -73,3 +73,11 @@
     filter: grayscale(80%);
 }
 
+.Cargando {
+    color: white;
+    font-size: 24px;
+    font-family: "Alan Sans", Arial, sans-serif;
+    font-style: bold;
+    text-align: center;
+    margin-top: 20%;
+}

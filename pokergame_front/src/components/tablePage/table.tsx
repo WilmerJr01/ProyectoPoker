@@ -9,6 +9,7 @@ import ChatWidget from "../chatwidget/chatwiget.tsx";
 import "./table-page.css";
 
 export default function TablePage() {
+    const [loader, setLoader] = useState(false);
     const { id: tableId } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
@@ -34,6 +35,21 @@ export default function TablePage() {
 
     // una sola instancia de socket para toda la vida del componente
     const socketRef = useRef<ReturnType<typeof createSocket> | null>(null);
+
+    useEffect(() => {
+        const handleLoad = () => setLoader(true);
+
+        if (document.readyState === "complete") {
+            // La página YA está cargada
+            setLoader(true);
+            return;
+        }
+
+        window.addEventListener("load", handleLoad);
+
+        return () => window.removeEventListener("load", handleLoad);
+    }, []);
+
 
     // efecto de autenticación + conexión socket + suscripción a eventos
     useEffect(() => {
@@ -96,7 +112,6 @@ export default function TablePage() {
         return () => {
             mounted = false;
             // salir de la mesa y limpiar listeners
-            leaveTable(tableId);
             socket.off("players:update", handlePlayersUpdate);
             socket.off("turn:active", handleTurnActive);
         };
@@ -191,34 +206,34 @@ export default function TablePage() {
     };
 
     return (
-        <div className="table-page page-felt-bg">
-            <header className="table-top">
-                <div className="top-left-spacer" />
-                <h1 className="table-name">{tableId}</h1>
-                <button className="exit-btn" onClick={exit}>Exit</button>
-            </header>
+        <>
+            {loader && socketRef.current && nickname && players && seats ? (<div className="table-page page-felt-bg">
+                <header className="table-top">
+                    <div className="top-left-spacer" />
+                    <h1 className="table-name">{tableId}</h1>
+                    <button className="exit-btn" onClick={exit}>Exit</button>
+                </header>
 
-            <main className="table-main">
-                <PokerTable seats={seats} />
-            </main>
+                <main className="table-main">
+                    <PokerTable seats={seats} />
+                </main>
 
-            <nav className="action-bar">
-                <button className="btn action-fold" onClick={onFold} disabled={!isMyTurn}>Fold</button>
-                <button className="btn action-check" onClick={onCheck} disabled={!isMyTurn}>Check</button>
-                <button className="btn action-bet" onClick={onBet} disabled={!isMyTurn}>Bet</button>
-            </nav>
+                <nav className="action-bar">
+                    <button className="btn action-fold" onClick={onFold} disabled={!isMyTurn}>Fold</button>
+                    <button className="btn action-check" onClick={onCheck} disabled={!isMyTurn}>Check</button>
+                    <button className="btn action-bet" onClick={onBet} disabled={!isMyTurn}>Bet</button>
+                </nav>
 
-            {/* Chat abajo a la derecha */}
-            {socketRef.current && tableId && nickname && (
-                <ChatWidget
-                    socket={socketRef.current}
-                    tableId={tableId}
-                    userId={userId}
-                    nickname={nickname}
-                />
-            )}
-
-
-        </div>
+                {/* Chat abajo a la derecha */}
+                {socketRef.current && tableId && nickname && (
+                    <ChatWidget
+                        socket={socketRef.current}
+                        tableId={tableId}
+                        userId={userId}
+                        nickname={nickname}
+                    />
+                )}
+            </div>) : <p className="Cargando">Loading...</p>}
+        </>
     );
 }
