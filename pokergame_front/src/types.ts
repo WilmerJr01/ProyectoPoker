@@ -51,3 +51,13 @@ export interface LeaveAck {
     error?: string;
     remainingPlayers?: string[];
 }
+
+export type ChatMessage = {
+    _id: string;
+    tableId: string;
+    userId: string | null;
+    nickname: string;
+    text: string;
+    isSystem?: boolean;
+    createdAt: string;
+};

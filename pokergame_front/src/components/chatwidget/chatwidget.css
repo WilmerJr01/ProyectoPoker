@@ -1,0 +1,138 @@
+/* Contenedor general: ARRIBA A LA IZQUIERDA */
+.chat-container {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 999;
+    font-size: 13px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* HEADER común (sirve para abrir/cerrar) */
+.chat-header {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 6px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.chat-header-toggle {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* ============= PREVIEW ============= */
+
+.chat-preview-box {
+    width: 260px;
+    background: rgba(10, 10, 14, 0.95);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.chat-preview-message {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.chat-preview-message strong {
+    font-weight: 700;
+}
+
+.no-messages {
+    opacity: 0.7;
+}
+
+/* Input compacto en modo preview */
+.chat-input-row {
+    display: flex;
+    padding: 6px;
+    gap: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.chat-input-row--compact {
+    padding: 6px 8px;
+}
+
+.chat-input {
+    flex: 1;
+    border-radius: 6px;
+    border: none;
+    padding: 4px 8px;
+    font-size: 13px;
+    outline: none;
+}
+
+.chat-send {
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 13px;
+    cursor: pointer;
+    background: #0a84ff;
+    color: white;
+}
+
+/* ============= CHAT COMPLETO ============= */
+
+.chat-box {
+    width: 320px;
+    max-height: 60vh;
+    background: rgba(5, 5, 10, 0.96);
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 8px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.chat-message {
+    background: rgba(40, 40, 55, 0.9);
+    padding: 6px 8px;
+    border-radius: 8px;
+}
+
+.chat-message.me {
+    align-self: flex-end;
+    background: rgba(0, 120, 60, 0.9);
+}
+
+.chat-message.system {
+    font-style: italic;
+    background: rgba(120, 120, 120, 0.9);
+}
+
+.meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 2px;
+    opacity: 0.8;
+}
+
+.text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Input al final del chat completo reutiliza .chat-input-row, .chat-input, .chat-send */

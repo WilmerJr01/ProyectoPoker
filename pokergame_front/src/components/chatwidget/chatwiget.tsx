@@ -1,73 +1,155 @@
+// src/components/chatwidget/chatwiget.tsx
+import type { FormEvent } from "react";
 import { useEffect, useRef, useState } from "react";
-import { createSocket } from "../../socket";
-import "./chat-widget.css";
+import type { Socket } from "socket.io-client";
+import type { ChatMessage } from "../../types";
+import "./chatwidget.css";
 
-type ChatMsg = { id: string; userId: string; text: string; ts: number };
+type ChatWidgetProps = {
+    socket: Socket;
+    tableId: string;
+    userId: string;
+    nickname: string;
+};
 
-export default function ChatWidget({ tableId, userId }: { tableId: string; userId: string }) {
-    const [messages, setMessages] = useState<ChatMsg[]>([]);
-    const [text, setText] = useState("");
-    const [expanded, setExpanded] = useState(false);
-    const listRef = useRef<HTMLDivElement | null>(null);
+export default function ChatWidget({
+    socket,
+    tableId,
+    userId,
+    nickname,
+}: ChatWidgetProps) {
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [input, setInput] = useState("");
+    const [open, setOpen] = useState(false); // false = previsualización
+    const bottomRef = useRef<HTMLDivElement | null>(null);
 
+    // Escuchar mensajes del servidor
     useEffect(() => {
-        const socket = createSocket();
-        socket.on("chat:message", (msg: ChatMsg) => {
-            setMessages((prev) => [...prev.slice(-99), msg]);
-        });
-        return () => {
-            socket.off("chat:message");
+        const handleIncoming = (message: ChatMessage) => {
+            if (message.tableId !== tableId) return;
+            setMessages((prev) => [...prev, message]);
         };
-    }, [tableId]);
 
+        socket.on("chat:message", handleIncoming);
+
+        return () => {
+            socket.off("chat:message", handleIncoming);
+        };
+    }, [socket, tableId]);
+
+    // Autoscroll cuando está abierto
     useEffect(() => {
-        if (expanded && listRef.current) {
-            listRef.current.scrollTop = listRef.current.scrollHeight;
+        if (open) {
+            bottomRef.current?.scrollIntoView({ behavior: "smooth" });
         }
-    }, [expanded, messages.length]);
+    }, [open, messages.length]);
 
-    const last = messages[messages.length - 1];
+    const handleSend = (e: FormEvent) => {
+        e.preventDefault();
+        const text = input.trim();
+        if (!text) return;
 
-    const send = () => {
-        const t = text.trim();
-        if (!t) return;
-        const socket = createSocket();
-        socket.emit("chat:send", { tableId, userId, text: t });
-        setText("");
+        socket.emit("chat:send", { tableId, text, nickname });
+        setInput("");
     };
 
+    const lastMsg = messages[messages.length - 1];
+
     return (
-        <div className={`chatWidget ${expanded ? "expanded" : "collapsed"}`}>
-            {expanded && (
-                <div className="chatList" ref={listRef}>
-                    {messages.map((m) => (
-                        <div className={`chatItem ${m.userId === userId ? "mine" : "theirs"}`} key={m.id}>
-                            <span className="txt">{m.text}</span>
-                        </div>
-                    ))}
+        <div className={`chat-container ${open ? "open" : "closed"}`}>
+            {open ? (
+                // ================= CHAT COMPLETO =================
+                <div className="chat-box">
+                    <div className="chat-header" onClick={() => setOpen(false)}>
+                        <span>Chat de la mesa</span>
+                        <span className="chat-header-toggle">▲</span>
+                    </div>
+
+                    <div className="chat-messages">
+                        {messages.map((m) => {
+                            const isMe = m.userId === userId;
+                            return (
+                                <div
+                                    key={m._id}
+                                    className={`chat-message ${isMe ? "me" : ""} ${m.isSystem ? "system" : ""
+                                        }`}
+                                >
+                                    <div className="meta">
+                                        <span className="nick">
+                                            {m.isSystem ? m.nickname : isMe ? "Tú" : m.nickname}
+                                        </span>
+                                        <span className="time">
+                                            {new Date(m.createdAt).toLocaleTimeString([], {
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            })}
+                                        </span>
+                                    </div>
+                                    <div className="text">{m.text}</div>
+                                </div>
+                            );
+                        })}
+                        <div ref={bottomRef} />
+                    </div>
+
+                    <form className="chat-input-row" onSubmit={handleSend}>
+                        <input
+                            className="chat-input"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            placeholder="Escribe un mensaje..."
+                            maxLength={300}
+                        />
+                        <button className="chat-send" type="submit">
+                            Enviar
+                        </button>
+                    </form>
+                </div>
+            ) : (
+                // ================= PREVISUALIZACIÓN =================
+                <div className="chat-preview-box">
+                    <div className="chat-header" onClick={() => setOpen(true)}>
+                        <span>Chat de la mesa</span>
+                        <span className="chat-header-toggle">▼</span>
+                    </div>
+
+                    <div
+                        className="chat-preview-message"
+                        onClick={() => setOpen(true)}
+                    >
+                        {lastMsg ? (
+                            <>
+                                <strong>
+                                    {lastMsg.isSystem
+                                        ? lastMsg.nickname
+                                        : lastMsg.nickname === nickname
+                                            ? "Tú"
+                                            : lastMsg.nickname}
+                                    :
+                                </strong>{" "}
+                                {lastMsg.text.length > 40
+                                    ? lastMsg.text.slice(0, 40) + "…"
+                                    : lastMsg.text}
+                            </>
+                        ) : (
+                            <span className="no-messages">No hay mensajes aún</span>
+                        )}
+                    </div>
+
+                    <form className="chat-input-row chat-input-row--compact" onSubmit={handleSend}>
+                        <input
+                            className="chat-input"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            placeholder="Escribe..."
+                            maxLength={300}
+                        />
+                        <button className="chat-send" type="submit">
+                            ➤
+                        </button>
+                    </form>
                 </div>
             )}
-
-            {!expanded && (
-                <div className="lastMsg" title={last?.text || "Sin mensajes"}>
-                    {last?.text ?? "Sin mensajes"}
-                </div>
-            )}
-
-            <div className="composer">
-                <input
-                    className="chatInput"
-                    placeholder="Escribe..."
-                    value={text}
-                    onFocus={() => setExpanded(true)}
-                    onChange={(e) => setText(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && send()}
-                />
-                <button className="sendBtn" onClick={send}>Enviar</button>
-                {expanded && (
-                    <button className="closeBtn" onClick={() => setExpanded(false)}>×</button>
-                )}
-            </div>
         </div>
     );
 }

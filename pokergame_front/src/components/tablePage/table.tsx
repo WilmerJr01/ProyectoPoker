@@ -15,6 +15,7 @@ export default function TablePage() {
     const tableData = JSON.parse(localStorage.getItem("tableData") || "null") as tableData | null;
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId") || "";
+    const [nickname, setNickname] = useState<string>();
 
     const maxSeats = tableData?.maxPlayers ?? 9;
 
@@ -62,7 +63,7 @@ export default function TablePage() {
         if (!socketRef.current) {
             socketRef.current = createSocket();
         }
-        const socket = socketRef.current;
+        const socket = socketRef.current!; // ⬅️ aquí sí usamos socket para eventos
 
         // unirse a la mesa
         joinTable(tableId).then((res) => {
@@ -84,7 +85,7 @@ export default function TablePage() {
             if (!playerId || playerId === "" || playerId !== userId) {
                 setIsMyTurn(false);
                 return;
-            } else if (playerId === userId){
+            } else if (playerId === userId) {
                 setIsMyTurn(true);
             }
         };
@@ -137,7 +138,7 @@ export default function TablePage() {
                 orderedPlayers.map((pid) => axios.get(`${authBase}/auth/user/${pid}`))
             );
 
-            const users = results.map((r) => (r.status === "fulfilled" ? r.value.data : null));
+            const users = results.map((r) => (r.status === "fulfilled" ? r?.value.data : null));
 
             const nextSeats: Seat[] = Array.from({ length: maxSeats }).map((_, i) => {
                 const u = users[i];
@@ -151,6 +152,7 @@ export default function TablePage() {
                     };
                 }
                 const isHero = u._id === userId;
+                if (isHero) setNickname(u.nickname ?? " ")
                 return {
                     id: u._id ?? "",
                     nickname: u.nickname ?? "",
@@ -206,7 +208,16 @@ export default function TablePage() {
             </nav>
 
             {/* Chat abajo a la derecha */}
-            <ChatWidget tableId={tableId || ""} userId={userId} />
+            {socketRef.current && tableId && nickname && (
+                <ChatWidget
+                    socket={socketRef.current}
+                    tableId={tableId}
+                    userId={userId}
+                    nickname={nickname}
+                />
+            )}
+
+
         </div>
     );
 }
