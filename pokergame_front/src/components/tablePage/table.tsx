@@ -207,33 +207,39 @@ export default function TablePage() {
 
     return (
         <>
-            {loader && socketRef.current && nickname && players && seats ? (<div className="table-page page-felt-bg">
-                <header className="table-top">
-                    <div className="top-left-spacer" />
-                    <h1 className="table-name">{tableId}</h1>
-                    <button className="exit-btn" onClick={exit}>Exit</button>
-                </header>
+            {loader && socketRef.current ? (
+                <div className="table-page page-felt-bg">
+                    <header className="table-top">
+                        <div className="top-left-spacer" />
+                        <h1 className="table-name">{tableId}</h1>
+                        <button className="exit-btn" onClick={exit}>Exit</button>
+                    </header>
 
-                <main className="table-main">
-                    <PokerTable seats={seats} />
-                </main>
+                    <main className="table-main">
+                        {seats ? <PokerTable seats={seats} /> : <div>Loading seats...</div>}
+                    </main>
 
-                <nav className="action-bar">
-                    <button className="btn action-fold" onClick={onFold} disabled={!isMyTurn}>Fold</button>
-                    <button className="btn action-check" onClick={onCheck} disabled={!isMyTurn}>Check</button>
-                    <button className="btn action-bet" onClick={onBet} disabled={!isMyTurn}>Bet</button>
-                </nav>
+                    <nav className="action-bar">
+                        <button className="btn action-fold" onClick={onFold} disabled={!isMyTurn}>Fold</button>
+                        <button className="btn action-check" onClick={onCheck} disabled={!isMyTurn}>Check</button>
+                        <button className="btn action-bet" onClick={onBet} disabled={!isMyTurn}>Bet</button>
+                    </nav>
+                </div>
+            ) : (
+                <div className="Cargando">Loading...</div>
+            )}
 
-                {/* Chat abajo a la derecha */}
-                {socketRef.current && tableId && nickname && (
-                    <ChatWidget
-                        socket={socketRef.current}
-                        tableId={tableId}
-                        userId={userId}
-                        nickname={nickname}
-                    />
-                )}
-            </div>) : <p className="Cargando">Loading...</p>}
+
+            {/* Chat: montarlo LO ANTES POSIBLE */}
+            {socketRef.current && tableId && (
+                <ChatWidget
+                    socket={socketRef.current}
+                    tableId={tableId}
+                    userId={userId}
+                    nickname={nickname || "Jugador"}
+                />
+            )}
         </>
     );
+
 }
