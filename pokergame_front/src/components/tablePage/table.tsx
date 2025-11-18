@@ -170,6 +170,7 @@ export default function TablePage() {
         };
     }, [orderedPlayers, maxSeats, userId]);
 
+
     // acciones: reusar el MISMO socket
     const emitAction = (payload: any) => {
         if (!socketRef.current) return;

@@ -41,7 +41,7 @@
 /* ============= PREVIEW ============= */
 
 .chat-preview-box {
-    height: 115px;
+    min-height: 115px;
     width: 260px;
     background: rgba(10, 10, 14, 0.95);
     border-radius: 10px;
