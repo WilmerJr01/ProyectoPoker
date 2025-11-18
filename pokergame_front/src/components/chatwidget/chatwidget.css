@@ -15,22 +15,33 @@
 .chat-header {
     width: 100%;
     background: rgba(0, 0, 0, 0.85);
-    padding: 6px 10px;
+    padding: 10px 10px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     cursor: pointer;
     font-weight: 600;
 }
 
+.chat-header p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 .chat-header-toggle {
     font-size: 12px;
     opacity: 0.8;
+    margin-left: 10px;
+    transition: opacity 0.3s;
+}
+
+.chat-header-toggle:hover {
+    opacity: 0;
 }
 
 /* ============= PREVIEW ============= */
 
 .chat-preview-box {
+    height: 115px;
     width: 260px;
     background: rgba(10, 10, 14, 0.95);
     border-radius: 10px;
@@ -86,7 +97,8 @@
 /* ============= CHAT COMPLETO ============= */
 
 .chat-box {
-    width: 320px;
+    min-height: 115px;
+    width: 260px;
     max-height: 60vh;
     background: rgba(5, 5, 10, 0.96);
     border-radius: 12px;
@@ -107,6 +119,7 @@
 }
 
 .chat-message {
+    align-self: flex-start;
     background: rgba(40, 40, 55, 0.9);
     padding: 6px 8px;
     border-radius: 8px;
@@ -124,7 +137,8 @@
 
 .meta {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    gap: 6px;
     font-size: 11px;
     margin-bottom: 2px;
     opacity: 0.8;

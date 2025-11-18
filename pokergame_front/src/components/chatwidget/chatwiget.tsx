@@ -61,8 +61,7 @@ export default function ChatWidget({
                 // ================= CHAT COMPLETO =================
                 <div className="chat-box">
                     <div className="chat-header" onClick={() => setOpen(false)}>
-                        <span>Chat de la mesa</span>
-                        <span className="chat-header-toggle">▲</span>
+                        <p>Chat</p>
                     </div>
 
                     <div className="chat-messages">
@@ -97,11 +96,11 @@ export default function ChatWidget({
                             className="chat-input"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="Escribe un mensaje..."
-                            maxLength={300}
+                            placeholder="Write..."
+                            maxLength={150}
                         />
                         <button className="chat-send" type="submit">
-                            Enviar
+                            Send
                         </button>
                     </form>
                 </div>
@@ -109,8 +108,8 @@ export default function ChatWidget({
                 // ================= PREVISUALIZACIÓN =================
                 <div className="chat-preview-box">
                     <div className="chat-header" onClick={() => setOpen(true)}>
-                        <span>Chat de la mesa</span>
-                        <span className="chat-header-toggle">▼</span>
+                        <p>Chat preview</p>
+                        <p className="chat-header-toggle">Click to show</p>
                     </div>
 
                     <div
@@ -132,7 +131,7 @@ export default function ChatWidget({
                                     : lastMsg.text}
                             </>
                         ) : (
-                            <span className="no-messages">No hay mensajes aún</span>
+                            <span className="no-messages">Waiting new messages</span>
                         )}
                     </div>
 
@@ -141,11 +140,11 @@ export default function ChatWidget({
                             className="chat-input"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="Escribe..."
+                            placeholder="Write..."
                             maxLength={300}
                         />
                         <button className="chat-send" type="submit">
-                            ➤
+                            Send
                         </button>
                     </form>
                 </div>
