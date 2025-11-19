@@ -32,7 +32,10 @@ export type Seat = {
 };
 
 export type PokerTableProps = {
-    seats: Seat[]; // order determines position around the table
+    seats: Seat[];
+    pot: number;
+    bets: Record<string, number>;
+    chips: Record<string, number>;
 };
 
 export type tableData = {

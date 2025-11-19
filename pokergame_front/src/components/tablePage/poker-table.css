@@ -11,6 +11,14 @@
     border-radius: 28px;
     padding: 20px;
 }
+
+.initial {
+    user-select: none;
+    pointer-events: none;
+    font-family: "Alan Sans", sans-serif;
+    font-size: 24px;
+}
+
 .table-oval {
     position: absolute;
     inset: 10% 4%;
@@ -56,4 +64,39 @@
 }
 .avatar.empty {
     background: #000;
+}
+
+.pot-display {
+    font-family: "Alan Sans", sans-serif;
+    position: absolute;
+    user-select: none;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.seat-info {
+    margin-top: 8px;
+    text-align: center;
+    color: #fff;
+}
+
+.seat-info .nickname {
+    font-family: "Alan Sans", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0;
+}
+
+.seat-info .stack {
+    font-family: "Alan Sans", sans-serif;
+    font-size: 14px;
+    margin: 2px 0 0 0;
 }

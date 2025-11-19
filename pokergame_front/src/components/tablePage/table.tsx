@@ -19,6 +19,9 @@ export default function TablePage() {
     const [nickname, setNickname] = useState<string>();
 
     const maxSeats = tableData?.maxPlayers ?? 9;
+    const [pot, setPot] = useState<number>(0);
+    const [bets, setBets] = useState<Record<string, number>>({});
+    const [chips, setChips] = useState<Record<string, number>>({});
 
     const [players, setPlayers] = useState<string[]>([]);
     const [seats, setSeats] = useState<Seat[]>(
@@ -107,11 +110,33 @@ export default function TablePage() {
         };
 
         socket.on("players:update", handlePlayersUpdate);
-        socket.on("turn:active", handleTurnActive);
+
+        const handlePotUpdate = (data: { tableId: string; pot: number }) => {
+            if (!mounted) return;
+            console.log("🔥 pot:update payload:", data);
+            setPot(data.pot);
+        };
+
+        socket.on("pot:update", handlePotUpdate);
+
+        socket.on("bets:update", (newBets: Record<string, number>) => {
+            if (!mounted) return;
+            console.log("bets:update", newBets);
+            setBets(newBets);
+        });
+
+        socket.on("chips:update", (newChips: Record<string, number>) => {
+            if (!mounted) return;
+            console.log("chips:update", newChips);
+            setChips(newChips);
+        });
+
 
         return () => {
             mounted = false;
             // salir de la mesa y limpiar listeners
+            socket.off("bets:update");
+            socket.off("chips:update");
             socket.off("players:update", handlePlayersUpdate);
             socket.off("turn:active", handleTurnActive);
         };
@@ -205,18 +230,22 @@ export default function TablePage() {
         navigate("/home");
     };
 
+    console.log("🔵 Render TablePage", { loader, seats, pot, bets, chips });
+
     return (
         <>
             {loader && socketRef.current ? (
                 <div className="table-page page-felt-bg">
                     <header className="table-top">
-                        <div className="top-left-spacer" />
-                        <h1 className="table-name">{tableId}</h1>
+                        <div className="table-name">
+                            <h1>{tableData?.name.trim()}</h1>
+                            <p>{tableData?.id}</p>
+                        </div>
                         <button className="exit-btn" onClick={exit}>Exit</button>
                     </header>
 
                     <main className="table-main">
-                        {seats ? <PokerTable seats={seats} /> : <div>Loading seats...</div>}
+                        {seats ? <PokerTable seats={seats} pot={pot} chips={chips} bets={bets} /> : <div>Loading seats...</div>}
                     </main>
 
                     <nav className="action-bar">

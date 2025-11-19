@@ -1,5 +1,6 @@
 /* Contenedor general: ARRIBA A LA IZQUIERDA */
 .chat-container {
+    font-family: "Alan Sans", sans-serif;
     position: fixed;
     top: 16px;
     left: 16px;
@@ -76,6 +77,7 @@
 }
 
 .chat-input {
+    font-family: "Alan Sans", sans-serif;
     flex: 1;
     border-radius: 6px;
     border: none;
@@ -85,6 +87,7 @@
 }
 
 .chat-send {
+    font-family: "Alan Sans", sans-serif;
     border: none;
     border-radius: 6px;
     padding: 4px 8px;

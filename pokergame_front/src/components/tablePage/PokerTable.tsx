@@ -39,20 +39,28 @@ function polarPositions(count: number) {
 }
 
 
-function PokerTable({ seats }: PokerTableProps) {
+function PokerTable({ seats, pot, bets, chips }: PokerTableProps) {
     const positions = useMemo(() => polarPositions(seats.length || 9), [seats.length]);
 
     return (
         <div className="poker-wrap">
             <div className="felt">
                 <div className="table-oval" />
+                <div className="pot-display">Pot: {pot}</div>
                 {seats.map((s, i) => {
                     const { top, left } = positions[i];
                     const occupied = Boolean(s.nickname);
+                    const bet = bets[s.id] ?? 0;
+                    const chipCount = chips[s.id] ?? 0;
                     return (
                         <div key={i} className={`seat ${s.isHero ? "hero-seat" : ""}`} style={{ top: `${top}%`, left: `${left}%` }}>
                             <div className={`avatar ${occupied ? "occupied" : "empty"}`}>
                                 {occupied ? <span className="initial">{getInitial(s.nickname)}</span> : <span className="initial">+</span>}
+                            </div>
+                            <div className="seat-info">
+                                <div className="nickname">{s.nickname || "Empty"}</div>
+                                <div className="stack">Stack: {chipCount}</div>
+                                {bet > 0 && <div className="bet-amount">Bet: {bet}</div>}
                             </div>
                         </div>
                     );
