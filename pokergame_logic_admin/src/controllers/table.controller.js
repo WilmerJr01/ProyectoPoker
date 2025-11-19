@@ -54,11 +54,10 @@ export const createTable = async (req, res) => {
             inGame: false,             // mesa inactiva al crear
             currentHand: {
                 order: [],               // sin mano en curso
-                BTN: null,
-                SB: null,
-                BB: null,
-                pot: 0,
+                orderPreFlop: [],
+                pot: bigBlind + smallBlind, // el pozo inicia con las ciegas
                 currentTurn: null,
+                chips: {},               // Map<String, Number> -> inicializa como objeto vacío
                 bets: {},                // Map<String, Number> -> inicializa como objeto vacío
                 cards: {},               // Map<String, [String]> -> objeto vacío
                 community: [],
