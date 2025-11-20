@@ -1,0 +1,38 @@
+/* contenedor con perspectiva 3D */
+.community-card-wrapper {
+    perspective: 800px;
+    display: inline-block;
+}
+
+.community-card {
+    width: 75px;
+    height: 105px;
+    backface-visibility: hidden;
+    transform-origin: center;
+}
+
+/* cuando se activa el flip */
+.community-card-wrapper.is-flipping .community-card {
+    animation: card-flip 0.3s linear;
+}
+
+@keyframes card-flip {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    49% {
+        transform: rotateY(90deg);
+        /* carta casi de canto */
+    }
+
+    51% {
+        transform: rotateY(90deg);
+        /* aquí ya cambiamos la imagen en React */
+    }
+
+    100% {
+        transform: rotateY(0deg);
+        /* vuelve a quedar de frente */
+    }
+}

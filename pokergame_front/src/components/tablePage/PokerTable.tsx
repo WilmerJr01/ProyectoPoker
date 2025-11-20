@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react";
 import type { PokerTableProps } from "../../types";
 import "./poker-table.css";
-
+import CommunityCard from "../communityCard/communityCard";
 
 function getInitial(name?: string) {
     return (name?.trim()?.[0] ?? "").toUpperCase();
@@ -39,14 +39,29 @@ function polarPositions(count: number) {
 }
 
 
-function PokerTable({ seats, pot, bets, chips }: PokerTableProps) {
+function PokerTable({ seats, pot, bets, chips, community, cards }: PokerTableProps) {
     const positions = useMemo(() => polarPositions(seats.length || 9), [seats.length]);
+    const communityCards = Array(5).fill("CC").map((_, i) => community[i] ?? "CC");
+    const cardsPersonal: Record<string, string[]> = {};
+
+    for (const playerId of seats) {
+        const hand = cards[playerId.id] ?? [];
+        cardsPersonal[playerId.id] = [
+            hand[0] ?? "CC",
+            hand[1] ?? "CC"
+        ];
+    }
 
     return (
         <div className="poker-wrap">
             <div className="felt">
                 <div className="table-oval" />
                 <div className="pot-display">Pot: {pot}</div>
+                <div className="community-cards">
+                    {communityCards.map((cardCode, i) => (
+                        <CommunityCard key={i} code={cardCode} />
+                    ))}
+                </div>
                 {seats.map((s, i) => {
                     const { top, left } = positions[i];
                     const occupied = Boolean(s.nickname);
@@ -61,6 +76,11 @@ function PokerTable({ seats, pot, bets, chips }: PokerTableProps) {
                                 <div className="nickname">{s.nickname || "Empty"}</div>
                                 <div className="stack">Stack: {chipCount}</div>
                                 {bet > 0 && <div className="bet-amount">Bet: {bet}</div>}
+                                {occupied && <div className="person-cards">
+                                    {cardsPersonal[s.id].map((cardCode, i) => (
+                                        <CommunityCard key={i} code={cardCode} />
+                                    ))}
+                                </div>}
                             </div>
                         </div>
                     );

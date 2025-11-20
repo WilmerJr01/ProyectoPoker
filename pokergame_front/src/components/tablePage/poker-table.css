@@ -71,7 +71,7 @@
     position: absolute;
     user-select: none;
     pointer-events: none;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.6);
@@ -80,6 +80,15 @@
     border-radius: 12px;
     font-size: 18px;
     font-weight: 600;
+}
+
+.community-cards {
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 6px;
 }
 
 .seat-info {

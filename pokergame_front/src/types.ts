@@ -36,6 +36,8 @@ export type PokerTableProps = {
     pot: number;
     bets: Record<string, number>;
     chips: Record<string, number>;
+    community: string[];
+    cards: Record<string, string[]>;
 };
 
 export type tableData = {

@@ -23,6 +23,9 @@ export default function TablePage() {
     const [bets, setBets] = useState<Record<string, number>>({});
     const [chips, setChips] = useState<Record<string, number>>({});
 
+    const [community, setCommunity] = useState<string[]>([]);
+    const [cards, setCards] = useState<Record<string, string[]>>({});
+
     const [players, setPlayers] = useState<string[]>([]);
     const [seats, setSeats] = useState<Seat[]>(
         () =>
@@ -131,10 +134,23 @@ export default function TablePage() {
             setChips(newChips);
         });
 
+        socket.on("community:update", (newCommunity: string[]) => {
+            if (!mounted) return;
+            console.log("community:update", newCommunity);
+            setCommunity(newCommunity);
+        });
+
+        socket.on("cards:update", (newCards: Record<string, string[]>) => {
+            if (!mounted) return;
+            setCards(newCards);
+        });
+
 
         return () => {
             mounted = false;
             // salir de la mesa y limpiar listeners
+            socket.off("community:update");
+            socket.off("cards:update");
             socket.off("bets:update");
             socket.off("chips:update");
             socket.off("players:update", handlePlayersUpdate);
@@ -245,7 +261,7 @@ export default function TablePage() {
                     </header>
 
                     <main className="table-main">
-                        {seats ? <PokerTable seats={seats} pot={pot} chips={chips} bets={bets} /> : <div>Loading seats...</div>}
+                        {seats ? <PokerTable seats={seats} pot={pot} chips={chips} bets={bets} community={community} cards={cards} /> : <div>Loading seats...</div>}
                     </main>
 
                     <nav className="action-bar">
