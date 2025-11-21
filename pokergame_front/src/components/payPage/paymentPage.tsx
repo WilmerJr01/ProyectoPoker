@@ -27,6 +27,7 @@ export default function PaymentsPage() {
     const [error, setError] = useState<string | null>(null);
 
     const AUTH_BASE = import.meta.env.VITE_PORT_AUTH;
+    const PAY_BASE = import.meta.env.VITE_PORT_PAY; // 👉 debe ser "https://proyecto-poker-taupe.vercel.app"
 
     // 🔐 Verificar autenticación
     useEffect(() => {
@@ -57,12 +58,16 @@ export default function PaymentsPage() {
             setLoading(true);
             setError(null);
 
-            const r = await axios.get<PaymentTx[]>(`${AUTH_BASE}/pay`, {
-                params: {
-                    kind: tab,   // "topup" | "withdrawal"
-                    userId,      // 🔥 solo movimientos del usuario logueado
-                },
-            });
+            const r = await axios.get<PaymentTx[]>(
+                // 🔥 AQUÍ el cambio importante
+                `${PAY_BASE}/pay/payIn`,        // o `${PAY_BASE}/pay/payIn/` si tu ruta tiene barra final
+                {
+                    params: {
+                        kind: tab,   // "topup" | "withdrawal"
+                        userId,      // solo movimientos del usuario logueado
+                    },
+                }
+            );
 
             setTxs(r.data);
         } catch (err) {
@@ -78,7 +83,7 @@ export default function PaymentsPage() {
     useEffect(() => {
         fetchTxs();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tab]); // tab cambia entre "topup" y "withdrawal"
+    }, [tab]);
 
     return (
         <div className="home-page">
@@ -182,7 +187,7 @@ export default function PaymentsPage() {
                 onClose={() => setDrawerOpen(false)}
                 onCreated={async () => {
                     setDrawerOpen(false);
-                    await fetchTxs(); // recargar lista después de crear nueva tx
+                    await fetchTxs();
                 }}
             />
         </div>

@@ -4,11 +4,6 @@ import dotenv from "dotenv";
 
 dotenv.config()
 
-// ✅ Crear recarga (PayIn)
-import axios from "axios";
-import PayIn from "../models/PayIn.js";
-// si usas type: module, ajusta los imports según tu estructura
-
 export const createPayIn = async (req, res) => {
     try {
         // ⛔ stackinicial ya no se pide

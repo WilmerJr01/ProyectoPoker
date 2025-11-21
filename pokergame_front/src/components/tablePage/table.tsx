@@ -108,14 +108,16 @@ export default function TablePage() {
 
         const handleTurnActive = ({ playerId, option }: { playerId: string, option: boolean }) => {
             if (!mounted) return;
+            setTurnId(playerId)
+            setOptions(option)
+
             if (!playerId || playerId === "" || playerId !== userId) {
                 setIsMyTurn(false);
                 return;
             } else if (playerId === userId) {
                 setIsMyTurn(true);
             }
-            setTurnId(playerId)
-            setOptions(option)
+
         };
 
         socket.on("turn:active", handleTurnActive);
