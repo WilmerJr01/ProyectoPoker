@@ -271,7 +271,7 @@ export default function TablePage() {
         navigate("/home");
     };
 
-    console.log("🔵 Render TablePage", { loader, seats, pot, bets, chips });
+    console.log("🔵 Render TablePage", { loader, seats, pot, bets, chips, cards });
 
     return (
         <>
