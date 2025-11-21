@@ -6,6 +6,7 @@
     grid-template-columns: 260px minmax(0, 1fr);
     /* sidebar + contenido */
     gap: 26px;
+    font-family: 'Alan Sans';
 
     width: 100%;
     max-width: 1400px;

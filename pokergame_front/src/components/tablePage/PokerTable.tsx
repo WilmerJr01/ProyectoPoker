@@ -58,29 +58,49 @@ function PokerTable({ seats, pot, bets, chips, community, cards, dealer, show, t
                     const bet = bets[s.id] ?? 0;
                     const chipCount = chips[s.id] ?? 0;
 
-                    // Mano real que viene del servidor
                     const hand = cards[s.id] ?? [];
-                    const turnMy = s.id === turn
-                    let visibleHand
-                    // 👇 Solo el héroe ve sus cartas reales, los demás siempre ven CC
-                    if (show){
-                        visibleHand = hand
+                    const turnMy = s.id === turn;
+
+                    let visibleHand: string[];
+                    if (show) {
+                        visibleHand = hand;
                     } else {
-                        visibleHand = s.isHero ? [hand[0] ?? "CC", hand[1] ?? "CC"]: ["CC", "CC"];
+                        visibleHand = s.isHero
+                            ? [hand[0] ?? "CC", hand[1] ?? "CC"]
+                            : ["CC", "CC"];
                     }
+
+                    const isHero = s.isHero;
 
                     return (
                         <div
                             key={i}
-                            className={`seat ${s.isHero ? "hero-seat" : ""}`}
+                            className={`seat ${isHero ? "hero-seat" : ""}`}
                             style={{ top: `${top}%`, left: `${left}%` }}
                         >
-                            <div className={`avatar ${occupied ? "occupied" : "empty"} ${turnMy ? "meToca" :""}`}>
-                                {occupied
-                                    ? <span className="initial">{getInitial(s.nickname)}</span>
-                                    : <span className="initial">+</span>}
+                            {/* 🔹 Avatar + cartas al lado */}
+                            <div className="seat-header">
+                                <div className={`avatar ${occupied ? "occupied" : "empty"} ${turnMy ? "meToca" : ""}`}>
+                                    {occupied
+                                        ? <span className="initial">{getInitial(s.nickname)}</span>
+                                        : <span className="initial">+</span>}
+                                </div>
+
+                                {occupied && (
+                                    <div
+                                        className={
+                                            `person-cards ` +
+                                            (isHero ? "person-cards--hero" : "person-cards--other")
+                                        }
+                                    >
+                                        {visibleHand.map((cardCode, idx) => (
+                                            <CommunityCard key={idx} code={cardCode} />
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
+                            {/* 🔹 Info debajo (nickname, stack, bet) */}
                             <div className={`seat-info ${!cards[s.id] ? "offGame" : ""}`}>
                                 <div className="top-seat">
                                     {dealer && dealer === s.id && (
@@ -91,14 +111,6 @@ function PokerTable({ seats, pot, bets, chips, community, cards, dealer, show, t
 
                                 <div className="stack">Stack: {chipCount}</div>
                                 {bet > 0 && <div className="bet-amount">Bet: {bet}</div>}
-
-                                {occupied && (
-                                    <div className="person-cards">
-                                        {visibleHand.map((cardCode, idx) => (
-                                            <CommunityCard key={idx} code={cardCode} />
-                                        ))}
-                                    </div>
-                                )}
                             </div>
                         </div>
                     );
@@ -107,5 +119,6 @@ function PokerTable({ seats, pot, bets, chips, community, cards, dealer, show, t
         </div>
     );
 }
+
 
 export default memo(PokerTable);

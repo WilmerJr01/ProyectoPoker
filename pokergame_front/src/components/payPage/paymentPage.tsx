@@ -9,10 +9,10 @@ type TxKind = "topup" | "withdrawal";
 
 type PaymentTx = {
     _id: string;
-    userId: string;
+    user: string;
     amount: number;
     kind: TxKind;
-    note?: string;
+    notes?: string;
     createdAt?: string;
 };
 
@@ -138,17 +138,17 @@ export default function PaymentsPage() {
                                             <div className="tx-info">
                                                 <div className="tx-type">
                                                     <span
-                                                        className={`badge ${t.kind === "topup"
+                                                        className={`badge ${tab === "topup"
                                                                 ? "badge--topup"
                                                                 : "badge--withdrawal"
                                                             }`}
                                                     >
-                                                        {t.kind}
+                                                        {tab}
                                                     </span>
                                                 </div>
 
                                                 <div
-                                                    className={`tx-amount ${t.kind === "topup"
+                                                    className={`tx-amount ${tab === "topup"
                                                             ? "tx-amount--topup"
                                                             : "tx-amount--withdrawal"
                                                         }`}
@@ -157,8 +157,8 @@ export default function PaymentsPage() {
                                                 </div>
 
                                                 <div className="tx-meta">
-                                                    <p>User: {t.userId}</p>
-                                                    {t.note && <p>Note: {t.note}</p>}
+                                                    <p>User: {t.user}</p>
+                                                    {t.notes && <p>Note: {t.notes}</p>}
                                                     {t.createdAt && (
                                                         <p>
                                                             {new Date(

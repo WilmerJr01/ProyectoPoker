@@ -80,7 +80,7 @@ export default function NewTransactionDrawer({
         setErrorMsg(null);
 
         try {
-            const path = "/pay/payIn";
+            const path = `/pay/${kind ==="topup" ? "payIn" : "payOut"}`;
 
             const payload = {
                 user,

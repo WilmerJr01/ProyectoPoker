@@ -5,42 +5,69 @@ import dotenv from "dotenv";
 
 dotenv.config()
 
-// ✅ Crear retiro (PayOut)
 export const createPayOut = async (req, res) => {
     try {
-        const { user, amount, cardNumber, notes, token, stackinicial } = req.body;
+        // ⛔ stackinicial ya no se pide
+        const { user, amount, cardNumber, notes, token } = req.body;
 
-        if (!user || !amount || !cardNumber || !token || !stackinicial) {
+        if (!user || !amount || !cardNumber || !token) {
             return res.status(400).json({
                 message:
-                    "Los campos 'user', 'amount', 'cardNumber', 'token' y 'stack' son obligatorios",
+                    "Los campos 'user', 'amount', 'cardNumber' y 'token' son obligatorios",
             });
         }
-        const { verify } = await axios.post(`${process.env.URL_AUTH}/auth/verify`, { token })
 
-        if (verify?.valid) {
-            return res.status(400).json({ message: "Token no valido" })
+        // ✅ Verificar token contra el AUTH_SERVICE
+        const verifyResp = await axios.post(
+            `${process.env.URL_AUTH}/auth/verify`,
+            { token }
+        );
+
+        const isValid = verifyResp.data?.valid;
+
+        if (!isValid) {
+            return res.status(400).json({ message: "Token no válido" });
         }
 
-        const payOut = new PayOut({
+        // ✅ Crear el registro PayIn
+        const payIn = new PayOut({
             user,
             amount,
             cardNumber,
             notes,
         });
 
-        await payOut.save();
+        await payIn.save();
 
-        axios.put(`${process.env.URL_API}/api/user/${user}`,
-            { "stack": (stackinicial - amount) },
+        // ✅ Obtener el stack actual del usuario desde el API principal
+        const userResp = await axios.get(
+            `${process.env.URL_API}/api/user/${user}`,
             {
-                headers: { Authorization: `Bearer ${token}` }
-            })
+                headers: { Authorization: `Bearer ${token}` },
+            }
+        );
 
-        res.status(201).json(payOut);
+        const currentStack = Number(userResp.data?.stack ?? 0);
 
+        // 👇 Para PayIn normalmente se **suma** el amount al stack actual.
+        // Si quisieras que disminuya, cambia a: currentStack - amount
+        const newStack = currentStack + Number(amount);
+
+        // ✅ Actualizar el stack del usuario
+        await axios.put(
+            `${process.env.URL_API}/api/user/${user}`,
+            { stack: newStack },
+            {
+                headers: { Authorization: `Bearer ${token}` },
+            }
+        );
+
+        return res.status(201).json(payIn);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error("Error en createPayIn:", error?.response?.data || error);
+        return res
+            .status(400)
+            .json({ message: error?.message || "Error al crear PayIn" });
     }
 };
 
