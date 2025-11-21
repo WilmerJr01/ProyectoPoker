@@ -47,12 +47,23 @@ export const createPayOut = async (req, res) => {
 // ✅ Obtener todos los retiros
 export const getPayOuts = async (req, res) => {
     try {
-        const payOuts = await PayOut.find();
-        res.json(payOuts);
+        const { userId } = req.query;
+
+        if (!userId) {
+            return res.status(400).json({ message: "Missing userId" });
+        }
+
+        // Filtro base: solo transacciones del usuario actual
+        const filter = { userId };
+
+        const payIns = await PayOut.find(filter).sort({ createdAt: -1 });
+
+        res.json(payIns);
+
     } catch (error) {
         res.status(500).json({ message: error.message });
-    }
-};
+    };
+}
 
 // ✅ Obtener un retiro por ID
 export const getPayOutById = async (req, res) => {

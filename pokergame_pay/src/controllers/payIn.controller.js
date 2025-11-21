@@ -74,7 +74,7 @@ export const createPayIn = async (req, res) => {
 // ✅ Obtener todas las recargas
 export const getPayIns = async (req, res) => {
     try {
-        const { kind, userId } = req.query;
+        const {userId } = req.query;
 
         if (!userId) {
             return res.status(400).json({ message: "Missing userId" });
@@ -82,11 +82,6 @@ export const getPayIns = async (req, res) => {
 
         // Filtro base: solo transacciones del usuario actual
         const filter = { userId };
-
-        // Filtrar también por tipo si aplica
-        if (kind === "topup" || kind === "withdrawal") {
-            filter.kind = kind;
-        }
 
         const payIns = await PayIn.find(filter).sort({ createdAt: -1 });
 
