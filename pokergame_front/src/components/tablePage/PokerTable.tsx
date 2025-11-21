@@ -82,11 +82,13 @@ function PokerTable({ seats, pot, bets, chips, community, cards, dealer }: Poker
                                 </div>
                                 <div className="stack">Stack: {chipCount}</div>
                                 {bet > 0 && <div className="bet-amount">Bet: {bet}</div>}
-                                {occupied && <div className="person-cards">
-                                    {cardsPersonal[s.id].map((cardCode, i) => (
-                                        <CommunityCard key={i} code={cardCode} />
-                                    ))}
-                                </div>}
+                                {occupied && (
+                                    <div className="person-cards">
+                                        {(cardsPersonal[s.id] ?? ["CC", "CC"]).map((cardCode, i) => (
+                                            <CommunityCard key={i} code={cardCode} />
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     );
