@@ -81,7 +81,7 @@ export const getPayIns = async (req, res) => {
         }
 
         // Filtro base: solo transacciones del usuario actual
-        const filter = { userId };
+        const filter = { user: userId };
 
         const payIns = await PayIn.find(filter).sort({ createdAt: -1 });
 
