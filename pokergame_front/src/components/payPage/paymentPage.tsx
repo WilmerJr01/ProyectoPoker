@@ -60,10 +60,9 @@ export default function PaymentsPage() {
 
             const r = await axios.get<PaymentTx[]>(
                 // 🔥 AQUÍ el cambio importante
-                `${PAY_BASE}/pay/payIn`,        // o `${PAY_BASE}/pay/payIn/` si tu ruta tiene barra final
+                `${PAY_BASE}/pay/${tab==="topup" ? "payIn":"payOut"}`,        // o `${PAY_BASE}/pay/payIn/` si tu ruta tiene barra final
                 {
                     params: {
-                        kind: tab,   // "topup" | "withdrawal"
                         userId,      // solo movimientos del usuario logueado
                     },
                 }
