@@ -38,6 +38,7 @@ export default function TablePage() {
             })) as Seat[]
     );
     const [isMyTurn, setIsMyTurn] = useState(false);
+    const [turnId, setTurnId] = useState("")
     const [options, setOptions] = useState(false); //false es check y true es call
     const [dealer, setDealer] = useState<string>("")
     const [show, setShow] = useState<any>(false)
@@ -113,6 +114,7 @@ export default function TablePage() {
             } else if (playerId === userId) {
                 setIsMyTurn(true);
             }
+            setTurnId(playerId)
             setOptions(option)
         };
 
@@ -292,7 +294,7 @@ export default function TablePage() {
                     </header>
 
                     <main className="table-main">
-                        {seats ? <PokerTable seats={seats} pot={pot} chips={chips} bets={bets} community={community} cards={cards} dealer={dealer} show={show}/> : <div>Loading seats...</div>}
+                        {seats ? <PokerTable seats={seats} pot={pot} chips={chips} bets={bets} community={community} cards={cards} dealer={dealer} show={show} turn={turnId} /> : <div>Loading seats...</div>}
                     </main>
 
                     <nav className="action-bar">

@@ -36,7 +36,7 @@ function polarPositions(count: number) {
     return positions;
 }
 
-function PokerTable({ seats, pot, bets, chips, community, cards, dealer, show }: PokerTableProps) {
+function PokerTable({ seats, pot, bets, chips, community, cards, dealer, show, turn }: PokerTableProps) {
     const positions = useMemo(() => polarPositions(seats.length || 9), [seats.length]);
     const communityCards = Array(5).fill("CC").map((_, i) => community[i] ?? "CC");
 
@@ -60,6 +60,7 @@ function PokerTable({ seats, pot, bets, chips, community, cards, dealer, show }:
 
                     // Mano real que viene del servidor
                     const hand = cards[s.id] ?? [];
+                    const turnMy = s.id === turn
                     let visibleHand
                     // 👇 Solo el héroe ve sus cartas reales, los demás siempre ven CC
                     if (show){
@@ -74,13 +75,13 @@ function PokerTable({ seats, pot, bets, chips, community, cards, dealer, show }:
                             className={`seat ${s.isHero ? "hero-seat" : ""}`}
                             style={{ top: `${top}%`, left: `${left}%` }}
                         >
-                            <div className={`avatar ${occupied ? "occupied" : "empty"}`}>
+                            <div className={`avatar ${occupied ? "occupied" : "empty"} ${turnMy ? "meToca" :""}`}>
                                 {occupied
                                     ? <span className="initial">{getInitial(s.nickname)}</span>
                                     : <span className="initial">+</span>}
                             </div>
 
-                            <div className="seat-info">
+                            <div className={`seat-info ${!cards[s.id] ? "offGame" : ""}`}>
                                 <div className="top-seat">
                                     {dealer && dealer === s.id && (
                                         <img className="dealer" src={dealerImg} alt="dealer" />

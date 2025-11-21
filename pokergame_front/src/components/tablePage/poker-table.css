@@ -44,6 +44,11 @@
         0 8px 22px rgba(0, 0, 0, 0.4);
     border: 2px solid #fbbf24;
 }
+
+.avatar.meToca{
+    border: 5px solid #2d98b0;
+}
+
 .avatar {
     max-width: 60px;
     width: 3vw;
@@ -99,6 +104,10 @@
     display: flex;
     flex-direction: column;
     gap: 0px;
+}
+
+.seat-info.offGame{
+    opacity: 0.5;
 }
 
 .seat-info .nickname {
