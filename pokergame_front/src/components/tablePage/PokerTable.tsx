@@ -2,6 +2,7 @@ import { memo, useMemo } from "react";
 import type { PokerTableProps } from "../../types";
 import "./poker-table.css";
 import CommunityCard from "../communityCard/communityCard";
+import dealerImg from "../../assets/dealer.png"
 
 function getInitial(name?: string) {
     return (name?.trim()?.[0] ?? "").toUpperCase();
@@ -39,7 +40,7 @@ function polarPositions(count: number) {
 }
 
 
-function PokerTable({ seats, pot, bets, chips, community, cards }: PokerTableProps) {
+function PokerTable({ seats, pot, bets, chips, community, cards, dealer }: PokerTableProps) {
     const positions = useMemo(() => polarPositions(seats.length || 9), [seats.length]);
     const communityCards = Array(5).fill("CC").map((_, i) => community[i] ?? "CC");
     const cardsPersonal: Record<string, string[]> = {};
@@ -73,7 +74,12 @@ function PokerTable({ seats, pot, bets, chips, community, cards }: PokerTablePro
                                 {occupied ? <span className="initial">{getInitial(s.nickname)}</span> : <span className="initial">+</span>}
                             </div>
                             <div className="seat-info">
-                                <div className="nickname">{s.nickname || "Empty"}</div>
+                                <div className="top-seat">
+                                    {dealer && dealer === s.id && (
+                                        <img className="dealer" src={dealerImg} alt="dealer" />
+                                    )}
+                                    <div className="nickname">{s.nickname || "Empty"}</div>
+                                </div>
                                 <div className="stack">Stack: {chipCount}</div>
                                 {bet > 0 && <div className="bet-amount">Bet: {bet}</div>}
                                 {occupied && <div className="person-cards">

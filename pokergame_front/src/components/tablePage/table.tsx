@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { createSocket, joinTable, leaveTable } from "../../socket";
-import type { Seat, tableData } from "../../types";
+import type { Seat, tableData, ActionPayload } from "../../types";
 import PokerTable from "./PokerTable";
 // ojo al nombre del archivo; si se llama chatwidget/chatwidget.tsx, corrige el import
 import ChatWidget from "../chatwidget/chatwiget.tsx";
@@ -38,6 +38,8 @@ export default function TablePage() {
             })) as Seat[]
     );
     const [isMyTurn, setIsMyTurn] = useState(false);
+    const [options, setOptions] = useState(false); //false es check y true es call
+    const [dealer, setDealer]= useState<string>("")
 
     // una sola instancia de socket para toda la vida del componente
     const socketRef = useRef<ReturnType<typeof createSocket> | null>(null);
@@ -102,7 +104,7 @@ export default function TablePage() {
             setPlayers(p);
         };
 
-        const handleTurnActive = ({ playerId }: { playerId: string }) => {
+        const handleTurnActive = ({ playerId, option }: { playerId: string, option: boolean }) => {
             if (!mounted) return;
             if (!playerId || playerId === "" || playerId !== userId) {
                 setIsMyTurn(false);
@@ -110,7 +112,10 @@ export default function TablePage() {
             } else if (playerId === userId) {
                 setIsMyTurn(true);
             }
+            setOptions(option)
         };
+
+        socket.on("turn:active", handleTurnActive);
 
         socket.on("players:update", handlePlayersUpdate);
 
@@ -143,6 +148,12 @@ export default function TablePage() {
         socket.on("cards:update", (newCards: Record<string, string[]>) => {
             if (!mounted) return;
             setCards(newCards);
+        });
+
+        socket.on("dealer", (playerId) => {
+            if (!mounted) return;
+            console.log("Dealer es", playerId)
+            setDealer(playerId)
         });
 
 
@@ -226,20 +237,34 @@ export default function TablePage() {
         };
     }, [orderedPlayers, maxSeats, userId]);
 
-
-    // acciones: reusar el MISMO socket
-    const emitAction = (payload: any) => {
+    const emitAction = (payload: ActionPayload) => {
         if (!socketRef.current) return;
         socketRef.current.emit("action:send", payload);
     };
 
-    const onFold = () => emitAction({ tableId, action: "fold" });
-    const onCheck = () => emitAction({ tableId, action: "check" });
+    const onFold = () => {
+        emitAction({ tableId:tableData?.id || "", jugador: userId, action: "fold" });
+    };
+
+    const onCheck = () => {
+        emitAction({ tableId: tableData?.id || "", jugador: userId, action: "check" });
+    };
+
     const onBet = () => {
         const size = prompt("Bet size (chips)", "0");
         const amount = Number(size ?? 0) || 0;
-        emitAction({ tableId, action: "bet", amount });
+
+        emitAction({
+            tableId: tableData?.id || "",
+            jugador: userId,
+            action: "raise",
+            amount
+        });
     };
+
+    const onCall = () => {
+        emitAction({tableId: tableData?.id ||"", jugador: userId, action:"call"})
+    }
 
     const exit = async () => {
         if (tableId) await leaveTable(tableId);
@@ -261,12 +286,12 @@ export default function TablePage() {
                     </header>
 
                     <main className="table-main">
-                        {seats ? <PokerTable seats={seats} pot={pot} chips={chips} bets={bets} community={community} cards={cards} /> : <div>Loading seats...</div>}
+                        {seats ? <PokerTable seats={seats} pot={pot} chips={chips} bets={bets} community={community} cards={cards} dealer={dealer}/> : <div>Loading seats...</div>}
                     </main>
 
                     <nav className="action-bar">
                         <button className="btn action-fold" onClick={onFold} disabled={!isMyTurn}>Fold</button>
-                        <button className="btn action-check" onClick={onCheck} disabled={!isMyTurn}>Check</button>
+                        <button className="btn action-check" onClick={options ? onCall : onCheck} disabled={!isMyTurn}>{options ? 'Call' : 'Check'}</button>
                         <button className="btn action-bet" onClick={onBet} disabled={!isMyTurn}>Bet</button>
                     </nav>
                 </div>

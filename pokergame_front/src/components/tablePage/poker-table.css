@@ -45,8 +45,9 @@
     border: 2px solid #fbbf24;
 }
 .avatar {
-    width: 60px;
-    height: 60px;
+    max-width: 60px;
+    width: 3vw;
+    height: auto;
     border-radius: 999px;
     display: grid;
     place-items: center;
@@ -71,12 +72,12 @@
     position: absolute;
     user-select: none;
     pointer-events: none;
-    top: 40%;
+    top: 38%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.6);
     color: #fff;
-    padding: 8px 16px;
+    padding: 4px 8px;
     border-radius: 12px;
     font-size: 18px;
     font-weight: 600;
@@ -84,7 +85,7 @@
 
 .community-cards {
     position: absolute;
-    top: 53%;
+    top: 51.5%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
@@ -92,9 +93,12 @@
 }
 
 .seat-info {
-    margin-top: 8px;
+    margin-top: 4px;
     text-align: center;
     color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
 }
 
 .seat-info .nickname {
@@ -107,5 +111,19 @@
 .seat-info .stack {
     font-family: "Alan Sans", sans-serif;
     font-size: 14px;
-    margin: 2px 0 0 0;
+    margin:0;
+}
+
+.dealer{
+    max-width: 50px;
+    width: 1.5vw;
+    height: auto;
+}
+
+.top-seat{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }

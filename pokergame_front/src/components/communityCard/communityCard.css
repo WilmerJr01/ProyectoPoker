@@ -5,8 +5,9 @@
 }
 
 .community-card {
-    width: 75px;
-    height: 105px;
+    width: 4.5vw; /* 12% del ancho del viewport */
+    max-width: 75px; /* límite en pantallas grandes */
+    height: auto;
     backface-visibility: hidden;
     transform-origin: center;
 }

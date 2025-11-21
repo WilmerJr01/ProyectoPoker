@@ -38,6 +38,7 @@ export type PokerTableProps = {
     chips: Record<string, number>;
     community: string[];
     cards: Record<string, string[]>;
+    dealer: string;
 };
 
 export type tableData = {
@@ -66,3 +67,9 @@ export type ChatMessage = {
     isSystem?: boolean;
     createdAt: string;
 };
+
+export type ActionPayload =
+    | { tableId: string; jugador: string; action: "fold" }
+    | { tableId: string; jugador: string; action: "check" }
+    | { tableId: string; jugador: string; action: "call" }
+    | { tableId: string; jugador: string; action: "raise"; amount: number };
