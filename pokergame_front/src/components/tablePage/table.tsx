@@ -39,7 +39,8 @@ export default function TablePage() {
     );
     const [isMyTurn, setIsMyTurn] = useState(false);
     const [options, setOptions] = useState(false); //false es check y true es call
-    const [dealer, setDealer]= useState<string>("")
+    const [dealer, setDealer] = useState<string>("")
+    const [show, setShow] = useState<any>(false)
 
     // una sola instancia de socket para toda la vida del componente
     const socketRef = useRef<ReturnType<typeof createSocket> | null>(null);
@@ -156,6 +157,11 @@ export default function TablePage() {
             setDealer(playerId)
         });
 
+        socket.on("mostrar:cartas", (val) => {
+            if (!mounted) return;
+            setShow(val)
+        })
+
 
         return () => {
             mounted = false;
@@ -243,7 +249,7 @@ export default function TablePage() {
     };
 
     const onFold = () => {
-        emitAction({ tableId:tableData?.id || "", jugador: userId, action: "fold" });
+        emitAction({ tableId: tableData?.id || "", jugador: userId, action: "fold" });
     };
 
     const onCheck = () => {
@@ -263,7 +269,7 @@ export default function TablePage() {
     };
 
     const onCall = () => {
-        emitAction({tableId: tableData?.id ||"", jugador: userId, action:"limp"})
+        emitAction({ tableId: tableData?.id || "", jugador: userId, action: "limp" })
     }
 
     const exit = async () => {
@@ -286,7 +292,7 @@ export default function TablePage() {
                     </header>
 
                     <main className="table-main">
-                        {seats ? <PokerTable seats={seats} pot={pot} chips={chips} bets={bets} community={community} cards={cards} dealer={dealer}/> : <div>Loading seats...</div>}
+                        {seats ? <PokerTable seats={seats} pot={pot} chips={chips} bets={bets} community={community} cards={cards} dealer={dealer} show={show}/> : <div>Loading seats...</div>}
                     </main>
 
                     <nav className="action-bar">

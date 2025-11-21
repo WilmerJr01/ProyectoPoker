@@ -39,6 +39,7 @@ export type PokerTableProps = {
     community: string[];
     cards: Record<string, string[]>;
     dealer: string;
+    show: boolean
 };
 
 export type tableData = {

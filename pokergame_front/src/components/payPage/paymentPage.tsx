@@ -19,120 +19,170 @@ type PaymentTx = {
 export default function PaymentsPage() {
     const navigate = useNavigate();
     const token = localStorage.getItem("token") || "";
+    const userId = localStorage.getItem("userId") || "";
     const [tab, setTab] = useState<TxKind>("topup");
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [txs, setTxs] = useState<PaymentTx[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const AUTH_BASE = import.meta.env.VITE_PORT_AUTH;
 
+    // 🔐 Verificar autenticación
     useEffect(() => {
-        if (!token) {
-            navigate("/login");
-            return;
+        const verifyToken = async () => {
+            if (!token || !userId) {
+                navigate("/login");
+                return;
+            }
+
+            try {
+                const r = await axios.post(`${AUTH_BASE}/auth/verify`, { token });
+                if (!r.data?.valid) {
+                    navigate("/login");
+                }
+            } catch {
+                navigate("/login");
+            }
+        };
+
+        verifyToken();
+    }, [token, userId, navigate, AUTH_BASE]);
+
+    // 📥 Cargar transacciones del usuario según la pestaña
+    const fetchTxs = async () => {
+        if (!token || !userId) return;
+
+        try {
+            setLoading(true);
+            setError(null);
+
+            const r = await axios.get<PaymentTx[]>(`${AUTH_BASE}/pay`, {
+                params: {
+                    kind: tab,   // "topup" | "withdrawal"
+                    userId,      // 🔥 solo movimientos del usuario logueado
+                },
+            });
+
+            setTxs(r.data);
+        } catch (err) {
+            console.error(err);
+            setError("No se pudieron cargar las operaciones.");
+            setTxs([]);
+        } finally {
+            setLoading(false);
         }
-        axios
-            .post(`${AUTH_BASE}/auth/verify`, { token })
-            .then((r) => {
-                if (!r.data?.valid) navigate("/login");
-            })
-            .catch(() => navigate("/login"));
-    }, []);
+    };
 
-    //
+    // Cuando cambie la pestaña, recargar lista
+    useEffect(() => {
+        fetchTxs();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tab]); // tab cambia entre "topup" y "withdrawal"
 
-    /*useEffect(() => {
-        fetchTxs(tab);
-    }, [tab]);
-*/
     return (
         <div className="home-page">
             <OptionBar />
 
-            <div className="body_home">
-                {/* 🔙 Botón volver al Home */}
+            <div className="body_payments">
+                {/* Botón volver al Home */}
                 <div className="back_home_container">
                     <button className="btn-back" onClick={() => navigate("/home")}>
                         ← Volver al Home
                     </button>
                 </div>
 
-                <div className="options_home">
+                {/* Sidebar */}
+                <aside className="options_home">
                     <div
+                        className={`select_option ${tab === "topup" ? "active" : ""}`}
                         onClick={() => setTab("topup")}
-                        className="select_option"
-                        style={{ opacity: tab === "topup" ? 1 : 0.6 }}
                     >
                         <p>Top Up</p>
                     </div>
+
                     <div
+                        className={`select_option ${tab === "withdrawal" ? "active" : ""}`}
                         onClick={() => setTab("withdrawal")}
-                        className="select_option"
-                        style={{ opacity: tab === "withdrawal" ? 1 : 0.6 }}
                     >
                         <p>Withdrawals</p>
                     </div>
+
                     <hr />
+
                     <div
-                        onClick={() => setDrawerOpen(true)}
                         className="create_new_option"
+                        onClick={() => setDrawerOpen(true)}
                     >
                         <p>New {tab === "topup" ? "Top Up" : "Withdrawal"}</p>
                     </div>
-                </div>
+                </aside>
 
-                <div className="option_selected_home">
-                    <h2 style={{ marginBottom: 10 }}>
-                        {tab === "topup" ? "Top Ups" : "Withdrawals"}
-                    </h2>
+                {/* Contenido principal */}
+                <main className="option_selected_home">
+                    <h2>{tab === "topup" ? "Top Ups" : "Withdrawals"}</h2>
 
-                    {txs.length ? (
-                        <ul className="txs">
-                            {txs.map((t) => (
-                                <li key={t._id} className="tx-card">
-                                    <div className="tx-info">
-                                        <div className="tx-type">
-                                            <span
-                                                className={`badge ${t.kind === "topup"
-                                                    ? "badge--topup"
-                                                    : "badge--withdrawal"
-                                                    }`}
-                                            >
-                                                {t.kind}
-                                            </span>
-                                        </div>
+                    {loading && <p>Cargando operaciones...</p>}
+                    {error && <p className="error">{error}</p>}
 
-                                        <div
-                                            className={`tx-amount ${t.kind === "topup"
-                                                ? "tx-amount--topup"
-                                                : "tx-amount--withdrawal"
-                                                }`}
-                                        >
-                                            {t.amount}
-                                        </div>
+                    {!loading && !error && (
+                        <>
+                            {txs.length ? (
+                                <ul className="txs">
+                                    {txs.map((t) => (
+                                        <li key={t._id} className="tx-card">
+                                            <div className="tx-info">
+                                                <div className="tx-type">
+                                                    <span
+                                                        className={`badge ${t.kind === "topup"
+                                                                ? "badge--topup"
+                                                                : "badge--withdrawal"
+                                                            }`}
+                                                    >
+                                                        {t.kind}
+                                                    </span>
+                                                </div>
 
-                                        <div className="tx-meta">
-                                            <p>User: {t.userId}</p>
-                                            {t.note ? <p>Note: {t.note}</p> : null}
-                                            {t.createdAt ? (
-                                                <p>{new Date(t.createdAt).toLocaleString()}</p>
-                                            ) : null}
-                                        </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No hay operaciones.</p>
+                                                <div
+                                                    className={`tx-amount ${t.kind === "topup"
+                                                            ? "tx-amount--topup"
+                                                            : "tx-amount--withdrawal"
+                                                        }`}
+                                                >
+                                                    {t.amount}
+                                                </div>
+
+                                                <div className="tx-meta">
+                                                    <p>User: {t.userId}</p>
+                                                    {t.note && <p>Note: {t.note}</p>}
+                                                    {t.createdAt && (
+                                                        <p>
+                                                            {new Date(
+                                                                t.createdAt
+                                                            ).toLocaleString()}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No hay operaciones.</p>
+                            )}
+                        </>
                     )}
-                </div>
+                </main>
             </div>
 
+            {/* Drawer */}
             <NewTransactionDrawer
                 open={drawerOpen}
                 kind={tab}
                 onClose={() => setDrawerOpen(false)}
-                onCreated={() => {
+                onCreated={async () => {
                     setDrawerOpen(false);
+                    await fetchTxs(); // recargar lista después de crear nueva tx
                 }}
             />
         </div>
