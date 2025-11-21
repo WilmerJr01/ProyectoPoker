@@ -263,7 +263,7 @@ export default function TablePage() {
     };
 
     const onCall = () => {
-        emitAction({tableId: tableData?.id ||"", jugador: userId, action:"call"})
+        emitAction({tableId: tableData?.id ||"", jugador: userId, action:"limp"})
     }
 
     const exit = async () => {

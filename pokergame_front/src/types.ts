@@ -71,5 +71,5 @@ export type ChatMessage = {
 export type ActionPayload =
     | { tableId: string; jugador: string; action: "fold" }
     | { tableId: string; jugador: string; action: "check" }
-    | { tableId: string; jugador: string; action: "call" }
+    | { tableId: string; jugador: string; action: "limp" }
     | { tableId: string; jugador: string; action: "raise"; amount: number };
