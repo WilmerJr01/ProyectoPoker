@@ -2,7 +2,7 @@ import { memo, useMemo } from "react";
 import type { PokerTableProps } from "../../types";
 import "./poker-table.css";
 import CommunityCard from "../communityCard/communityCard";
-import dealerImg from "../../assets/dealer.png"
+import dealerImg from "../../assets/dealer.webp"
 
 function getInitial(name?: string) {
     return (name?.trim()?.[0] ?? "").toUpperCase();
