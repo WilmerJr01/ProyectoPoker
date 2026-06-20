@@ -85,7 +85,6 @@ export default function NewTransactionDrawer({
             const payload = {
                 user,
                 amount: amountNum,
-                cardNumber: form.cardNumber.trim(),
                 notes: form.notes.trim() || null,
                 token: tokenLS
             };
