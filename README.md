@@ -1,5 +1,7 @@
 # PokerGame - Plataforma de Poker Online
 
+![React](https://img.shields.io/badge/React-19.1.1-61DAFB?logo=react) ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs) ![Express](https://img.shields.io/badge/Express-5.1.0-000000?logo=express) ![MongoDB](https://img.shields.io/badge/MongoDB-8.18.3-47A248?logo=mongodb) ![Socket.io](https://img.shields.io/badge/Socket.io-4.8.1-010101?logo=socketdotio) ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?logo=typescript) ![Vite](https://img.shields.io/badge/Vite-7.1.7-646CFF?logo=vite)
+
 Sistema de poker multiplayer en tiempo real con arquitectura de microservicios.
 
 ## Arquitectura
