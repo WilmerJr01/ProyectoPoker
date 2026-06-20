@@ -130,6 +130,11 @@ src/
 - Middleware de autenticación en rutas protegidas
 - Variables de entorno para datos sensibles (`.env`)
 
-## Licencia
+## Anexos
+Puedes encontrar la web en este enlaca:
 
-ISC
+https://pokerface-three.vercel.app/
+
+Puedes encontrar el repositorio del Back-End:
+
+https://github.com/WilmerJr01/WebSocket
